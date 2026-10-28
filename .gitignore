@@ -1,15 +1,21 @@
+﻿# Archivos temporales de Android y Gradle
+.gradle/
+.kotlin/
+**/build/
+
+# Configuración local de los editores
+.idea/
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
+
+# Configuración personal de Android
 local.properties
+**/local.properties
+
+# Archivos generados por Maven
+**/target/
+
+# Archivos temporales del sistema
+*.log
+*.tmp
+.DS_Store
+Thumbs.db

@@ -59,7 +59,8 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
-    implementation("umg.edu.gt.progra2:gastos-core:1.0.0")
+    // Utiliza la biblioteca del core compilada con Maven.
+    implementation("umg.edu.gt.progra2:gastos-core:1.0.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.11.0")
     implementation("androidx.room:room-runtime:2.8.4")
     implementation("androidx.room:room-ktx:2.8.4")
