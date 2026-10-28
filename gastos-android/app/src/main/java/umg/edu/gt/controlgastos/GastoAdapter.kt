@@ -7,9 +7,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import edu.umg.programacion2.gastos.modelo.Gasto
 import java.util.Locale
-
+import android.widget.Button
 // Muestra los gastos registrados en una lista.
-class GastoAdapter : RecyclerView.Adapter<GastoAdapter.GastoViewHolder>()
+
+// Recibe una función para indicar qué gasto se desea eliminar.
+class GastoAdapter(
+    private val onEliminar: (Gasto) -> Unit
+) : RecyclerView.Adapter<GastoAdapter.GastoViewHolder>()
 {
 
     // Aquí se guardan los gastos que mostraremos.
@@ -27,6 +31,9 @@ class GastoAdapter : RecyclerView.Adapter<GastoAdapter.GastoViewHolder>()
 
         val detalle: TextView =
             itemView.findViewById(R.id.tvDetalleGasto)
+        // Identifica el botón Eliminar del archivo XML.
+        val btnEliminar: Button =
+            itemView.findViewById(R.id.btnEliminarGasto)
     }
 
     // Crea el diseño de cada gasto.
@@ -45,7 +52,8 @@ class GastoAdapter : RecyclerView.Adapter<GastoAdapter.GastoViewHolder>()
     override fun onBindViewHolder(
         holder: GastoViewHolder,
         position: Int
-    ) {
+    )
+    {
         val gasto = gastos[position]
 
         holder.descripcion.text = gasto.descripcion
@@ -58,6 +66,10 @@ class GastoAdapter : RecyclerView.Adapter<GastoAdapter.GastoViewHolder>()
 
         holder.detalle.text =
             "${gasto.categoria} - ${gasto.fecha}"
+        // Elimina el gasto al presionar el botón.
+        holder.btnEliminar.setOnClickListener {
+            onEliminar(gasto)
+        }
     }
 
     // Indica cuántos gastos hay en la lista.

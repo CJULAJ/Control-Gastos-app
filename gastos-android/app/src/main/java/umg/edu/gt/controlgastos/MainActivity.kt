@@ -16,7 +16,7 @@ import umg.edu.gt.controlgastos.databinding.ActivityMainBinding
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-
+import androidx.appcompat.app.AlertDialog
 class MainActivity : AppCompatActivity() {
 
     // Permite utilizar los elementos del archivo XML.
@@ -29,7 +29,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Adaptador que muestra los gastos en la lista.
-    private val gastoAdapter = GastoAdapter()
+    // Recibe el gasto seleccionado cuando se presiona Eliminar.
+    private val gastoAdapter = GastoAdapter(
+        onEliminar = { gasto ->
+            confirmarEliminacion(gasto)
+        }
+    )
 
     // Configura la pantalla al abrir la aplicación.
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,7 +83,55 @@ class MainActivity : AppCompatActivity() {
 
         gastoAdapter.actualizarGastos(gastos)
     }
+    // Pregunta al usuario antes de eliminar un gasto.
+    private fun confirmarEliminacion(gasto: Gasto) {
+        AlertDialog.Builder(this)
+            .setTitle("Eliminar gasto")
+            .setMessage(
+                "¿Estás seguro de que deseas eliminar '${gasto.descripcion}'?"
+            )
+            .setPositiveButton("Eliminar") { _, _ ->
+                eliminarGasto(gasto)
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
 
+    // Elimina un gasto de Room y actualiza la pantalla.
+    private fun eliminarGasto(gasto: Gasto) {
+        lifecycleScope.launch {
+
+            // Obtiene la base de datos.
+            val database = AppDatabase.obtenerInstancia(applicationContext)
+            val dao = database.gastoDao()
+
+            // Busca el gasto seleccionado por su identificador.
+            val gastoGuardado = dao.obtenerPorId(gasto.id)
+
+            if (gastoGuardado == null) {
+                Toast.makeText(
+                    this@MainActivity,
+                    "No se encontró el gasto",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@launch
+            }
+
+            // Elimina el gasto de la base de datos.
+            dao.eliminar(gastoGuardado)
+
+            // Actualiza el total y la lista.
+            actualizarResumen()
+            cargarGastos()
+
+            // Confirma que el gasto fue eliminado.
+            Toast.makeText(
+                this@MainActivity,
+                "Gasto eliminado correctamente",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
     // Valida los datos y registra un nuevo gasto.
     private fun guardar() {
         val monto = binding.etMonto.text.toString().toDoubleOrNull()
