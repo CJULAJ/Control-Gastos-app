@@ -16,7 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
-import edu.umg.programacion2.gastos.datos.GastoRepositoryEnMemoria
+import umg.edu.gt.controlgastos.data.local.AppDatabase
+import umg.edu.gt.controlgastos.data.local.GastoRepositoryRoom
 import edu.umg.programacion2.gastos.modelo.Categoria
 import edu.umg.programacion2.gastos.modelo.Gasto
 import edu.umg.programacion2.gastos.servicio.ControlGastos
@@ -32,7 +33,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     // IMPORTANTE: la MISMA línea que en el Main.kt de consola. La lógica no cambió.
-    private val control = ControlGastos(GastoRepositoryEnMemoria())
+    private val control by lazy {
+        val database = AppDatabase.obtenerInstancia(applicationContext)
+        ControlGastos(GastoRepositoryRoom(database.gastoDao()))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

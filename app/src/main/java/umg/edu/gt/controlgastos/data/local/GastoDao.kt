@@ -10,8 +10,9 @@ import androidx.room.Update
 @Dao
 interface GastoDao {
 
+
     @Insert
-    suspend fun insertar(gasto: GastoEntity)
+    suspend fun insertar(gasto: GastoEntity): Long
 
     @Query("SELECT * FROM gastos ORDER BY fecha DESC, id DESC")
     suspend fun obtenerTodos(): List<GastoEntity>
