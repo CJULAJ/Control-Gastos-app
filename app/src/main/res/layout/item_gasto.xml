@@ -1,7 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:orientation="vertical"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<!-- Diseño de cada gasto que aparecerá en la lista. -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Muestra la descripción del gasto. -->
+    <TextView
+        android:id="@+id/tvDescripcionGasto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Descripción del gasto"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <!-- Muestra cuánto dinero se gastó. -->
+    <TextView
+        android:id="@+id/tvMontoGasto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Q 0.00"
+        android:textSize="16sp" />
+
+    <!-- Muestra la categoría y la fecha. -->
+    <TextView
+        android:id="@+id/tvDetalleGasto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Categoría - Fecha"
+        android:textSize="14sp" />
+
+    <!-- Botones para modificar o eliminar un gasto. -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <!-- Permite editar el gasto seleccionado. -->
+        <Button
+            android:id="@+id/btnEditarGasto"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Editar"
+            android:layout_marginEnd="8dp" />
+
+        <!-- Permite eliminar el gasto seleccionado. -->
+        <Button
+            android:id="@+id/btnEliminarGasto"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Eliminar" />
+
+    </LinearLayout>
 
 </LinearLayout>
