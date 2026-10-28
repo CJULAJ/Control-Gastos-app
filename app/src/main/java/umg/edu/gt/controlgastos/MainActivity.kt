@@ -1,70 +1,95 @@
 package umg.edu.gt.controlgastos
 
-import android.R
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
-import umg.edu.gt.controlgastos.data.local.AppDatabase
-import umg.edu.gt.controlgastos.data.local.GastoRepositoryRoom
+import androidx.recyclerview.widget.LinearLayoutManager
 import edu.umg.programacion2.gastos.modelo.Categoria
 import edu.umg.programacion2.gastos.modelo.Gasto
 import edu.umg.programacion2.gastos.servicio.ControlGastos
 import kotlinx.coroutines.launch
+import umg.edu.gt.controlgastos.data.local.AppDatabase
+import umg.edu.gt.controlgastos.data.local.GastoRepositoryRoom
 import umg.edu.gt.controlgastos.databinding.ActivityMainBinding
-import umg.edu.gt.controlgastos.ui.theme.ControlGastosTheme
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
-    // lateinit = "la inicializo después, en onCreate". Sin esto Kotlin exige un valor ya.
+
+    // Permite utilizar los elementos del archivo XML.
     private lateinit var binding: ActivityMainBinding
 
-    // IMPORTANTE: la MISMA línea que en el Main.kt de consola. La lógica no cambió.
+    // Conecta la lógica de gastos con la base de datos Room.
     private val control by lazy {
         val database = AppDatabase.obtenerInstancia(applicationContext)
         ControlGastos(GastoRepositoryRoom(database.gastoDao()))
     }
 
+    // Adaptador que muestra los gastos en la lista.
+    private val gastoAdapter = GastoAdapter()
+
+    // Configura la pantalla al abrir la aplicación.
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // 1. Inflar el XML con View Binding y mostrarlo.
+
+        // Carga el diseño XML.
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 2. El enum de la librería alimenta el Spinner (muestra el toString(): "Alimentación").
+        // Configura la lista de gastos.
+        binding.rvGastos.layoutManager = LinearLayoutManager(this)
+        binding.rvGastos.adapter = gastoAdapter
+
+        // Muestra las categorías disponibles.
         binding.spCategoria.adapter = ArrayAdapter(
-            this, android.R.layout.simple_spinner_dropdown_item, Categoria.entries
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            Categoria.entries
         )
 
-        // 3. Evento clic: el bloque { } se ejecuta DESPUÉS, cuando el usuario toca el botón.
-        binding.btnGuardar.setOnClickListener { guardar() }
+        // Guarda un gasto al presionar el botón.
+        binding.btnGuardar.setOnClickListener {
+            guardar()
+        }
 
-        // 4. resumen() es suspend -> se llama dentro de lifecycleScope.launch (receta).
-        lifecycleScope.launch { actualizarResumen() }
+        // Muestra los gastos guardados al abrir la aplicación.
+        lifecycleScope.launch {
+            actualizarResumen()
+            cargarGastos()
+        }
     }
 
+    // Consulta Room y muestra los gastos en la lista.
+    private suspend fun cargarGastos() {
+        val database = AppDatabase.obtenerInstancia(applicationContext)
+
+        val gastos = database.gastoDao().obtenerTodos().map { entidad ->
+            Gasto(
+                id = entidad.id,
+                descripcion = entidad.descripcion,
+                monto = entidad.monto,
+                categoria = Categoria.valueOf(entidad.categoria),
+                fecha = entidad.fecha
+            )
+        }
+
+        gastoAdapter.actualizarGastos(gastos)
+    }
+
+    // Valida los datos y registra un nuevo gasto.
     private fun guardar() {
-        // ❌ Error común: .toDouble() cierra la app si el campo está vacío.
-        // ✅ toDoubleOrNull() + early return (null safety de la Clase 11).
         val monto = binding.etMonto.text.toString().toDoubleOrNull()
-        if (monto == null) {
-            binding.etMonto.error = "Ingresa un monto válido"
+
+        // Evita guardar montos incorrectos.
+        if (monto == null || monto <= 0) {
+            binding.etMonto.error = "Ingresa un monto mayor que cero"
             return
         }
 
+        // Obtiene los datos escritos por el usuario.
         val gasto = Gasto(
             descripcion = binding.etDescripcion.text.toString().trim(),
             monto = monto,
@@ -72,25 +97,41 @@ class MainActivity : AppCompatActivity() {
             fecha = fechaDeHoy()
         )
 
+        // Guarda el gasto utilizando la biblioteca gastos-core.
         lifecycleScope.launch {
-            // 5. La validación vive en la librería, no en la pantalla.
             val error = control.registrar(gasto)
+
             if (error != null) {
-                Toast.makeText(this@MainActivity, error, Toast.LENGTH_SHORT).show()
-                return@launch   // return dentro de launch: sale solo del bloque
+                Toast.makeText(
+                    this@MainActivity,
+                    error,
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@launch
             }
+
+            // Limpia los campos después de guardar.
             binding.etDescripcion.text.clear()
             binding.etMonto.text.clear()
+
+            // Actualiza el resumen y la lista.
             actualizarResumen()
+            cargarGastos()
         }
     }
 
+    // Actualiza el total de gastos.
     private suspend fun actualizarResumen() {
-        binding.tvResumen.text = control.resumen()   // "2 gastos · Total: Q 55.50"
+        binding.tvResumen.text = control.resumen()
         binding.tvHolaMundo.text = "Hola que hace!!!"
     }
 
-    // Cuidado: java.time.LocalDate necesita API 26; con minSdk 24 usamos SimpleDateFormat.
-    private fun fechaDeHoy(): String = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date())
-
+    // Obtiene la fecha actual.
+    private fun fechaDeHoy(): String {
+        return SimpleDateFormat(
+            "yyyy-MM-dd",
+            Locale.US
+        ).format(Date())
+    }
 }
+
