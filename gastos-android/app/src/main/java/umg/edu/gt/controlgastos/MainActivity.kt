@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import edu.umg.programacion2.gastos.modelo.Categoria
 import edu.umg.programacion2.gastos.modelo.Gasto
 import edu.umg.programacion2.gastos.servicio.ControlGastos
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import umg.edu.gt.controlgastos.data.local.AppDatabase
 import umg.edu.gt.controlgastos.data.local.GastoRepositoryRoom
 import umg.edu.gt.controlgastos.databinding.ActivityMainBinding
@@ -21,6 +23,7 @@ import android.view.LayoutInflater
 import android.widget.EditText
 import android.widget.Spinner
 import android.content.Intent
+import java.util.Calendar
 class MainActivity : AppCompatActivity() {
 
     // Permite utilizar los elementos del archivo XML.
@@ -54,8 +57,11 @@ class MainActivity : AppCompatActivity() {
         }
     )
 
+    override fun onResume() {
+        super.onResume()
+        actualizarSaludoUsuario()
+    }
     // Configura la pantalla al abrir la aplicación.
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -78,6 +84,7 @@ class MainActivity : AppCompatActivity() {
         // Carga el diseño XML.
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        actualizarSaludoUsuario()
 
 // Cierra la sesión del usuario actual.
         binding.btnCerrarSesion.setOnClickListener {
@@ -156,6 +163,30 @@ class MainActivity : AppCompatActivity() {
             cargarGastos()
         }
     }
+
+
+    private fun actualizarSaludoUsuario() {
+        lifecycleScope.launch {
+            val usuario = withContext(Dispatchers.IO) {
+                AppDatabase.obtenerInstancia(applicationContext)
+                    .usuarioDao()
+                    .buscarPorId(usuarioId)
+            }
+
+            val hora = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+
+            val saludo = when (hora) {
+                in 5..11 -> "Buenos días"
+                in 12..18 -> "Buenas tardes"
+                else -> "Buenas noches"
+            }
+
+            val nombre = usuario?.nombreUsuario ?: "Usuario"
+
+            binding.tvSaludoUsuario.text = "¡$saludo, $nombre!"
+        }
+    }
+
 
     // Consulta Room y muestra los gastos en la lista.
     private suspend fun cargarGastos() {
