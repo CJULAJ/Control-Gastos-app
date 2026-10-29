@@ -533,9 +533,30 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    // Actualiza el total de gastos.
     private suspend fun actualizarResumen() {
-        binding.tvResumen.text = control.resumen()
+        try {
+            // Obtiene el resumen de gastos del usuario actual.
+            val resumen = control.resumen()
+
+            // Actualiza el texto únicamente si la consulta funciona.
+            binding.tvResumen.text = resumen
+
+        } catch (e: kotlinx.coroutines.CancellationException) {
+            throw e
+
+        } catch (e: Exception) {
+            android.util.Log.e(
+                "ControlGastos",
+                "Error al actualizar el resumen de gastos",
+                e
+            )
+
+            Toast.makeText(
+                this@MainActivity,
+                "No se pudo actualizar el resumen de gastos.",
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 
     // Obtiene la fecha actual.
