@@ -206,6 +206,10 @@ class MainActivity : AppCompatActivity() {
             mostrarSeccion("agregar")
         }
 
+        binding.navAgregarIcono.setOnClickListener {
+            mostrarSeccion("agregar")
+        }
+
         binding.navDatos.setOnClickListener {
             mostrarSeccion("datos")
         }
@@ -221,6 +225,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun mostrarSeccion(seccion: String) {
+
+        actualizarBarraNavegacion(seccion)
 
         // Oculta las secciones existentes.
         binding.seccionInicio.visibility = View.GONE
@@ -617,6 +623,9 @@ class MainActivity : AppCompatActivity() {
                 actualizarResumen()
                 cargarGastos()
 
+                // Muestra la sección de gastos para ver el nuevo registro sin volver a inicio.
+                mostrarSeccion("gastos")
+
                 Toast.makeText(
                     this@MainActivity,
                     "Gasto registrado correctamente",
@@ -902,6 +911,64 @@ class MainActivity : AppCompatActivity() {
                     "No se pudo cargar el perfil",
                     Toast.LENGTH_SHORT
                 ).show()
+            }
+        }
+    }
+
+    private fun actualizarBarraNavegacion(seccion: String) {
+
+        val botones = listOf(
+            binding.navInicio,
+            binding.navGastos,
+            binding.navAgregar,
+            binding.navDatos,
+            binding.navPerfil
+        )
+
+        val colorNormal = androidx.core.content.ContextCompat.getColor(
+            this,
+            R.color.finance_secondary_text
+        )
+
+        val colorSeleccionado = androidx.core.content.ContextCompat.getColor(
+            this,
+            R.color.finance_primary
+        )
+
+        botones.forEach { boton ->
+            boton.setTextColor(colorNormal)
+            boton.setTypeface(null, android.graphics.Typeface.NORMAL)
+        }
+
+        val seleccionado = when (seccion) {
+            "inicio" -> binding.navInicio
+            "gastos" -> binding.navGastos
+            "agregar" -> binding.navAgregar
+            "datos" -> binding.navDatos
+            "perfil" -> binding.navPerfil
+            else -> binding.navInicio
+        }
+
+        seleccionado.setTextColor(colorSeleccionado)
+        seleccionado.setTypeface(null, android.graphics.Typeface.BOLD)
+
+        // Cambiar también el color de los iconos.
+        val iconos = listOf(
+            binding.navInicio,
+            binding.navGastos,
+            binding.navDatos,
+            binding.navPerfil
+        )
+
+        iconos.forEach { boton ->
+            val color = if (boton == seleccionado) {
+                colorSeleccionado
+            } else {
+                colorNormal
+            }
+
+            boton.compoundDrawablesRelative.forEach { drawable ->
+                drawable?.mutate()?.setTint(color)
             }
         }
     }

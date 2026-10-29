@@ -16,10 +16,12 @@
 
 
         <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="20dp"
+            android:gravity="center_vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -528,11 +530,11 @@
 
         </ScrollView>
 
-        <!-- Navegación inferior fija -->
+        <!-- BARRA INFERIOR -->
         <LinearLayout
             android:id="@+id/barraNavegacion"
             android:layout_width="match_parent"
-            android:layout_height="72dp"
+            android:layout_height="76dp"
             android:orientation="horizontal"
             android:gravity="center"
             android:paddingHorizontal="6dp"
@@ -545,9 +547,11 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="⌂&#10;Inicio"
-                android:textColor="@color/finance_primary"
-                android:textSize="13sp"
+                android:drawableTop="@drawable/ic_nav_inicio"
+                android:drawablePadding="5dp"
+                android:text="Inicio"
+                android:textColor="@color/finance_secondary_text"
+                android:textSize="11sp"
                 android:clickable="true"
                 android:focusable="true" />
 
@@ -557,23 +561,44 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="☷&#10;Gastos"
+                android:drawableTop="@drawable/ic_nav_gastos"
+                android:drawablePadding="5dp"
+                android:text="Gastos"
                 android:textColor="@color/finance_secondary_text"
-                android:textSize="13sp"
+                android:textSize="11sp"
                 android:clickable="true"
                 android:focusable="true" />
 
-            <TextView
-                android:id="@+id/navAgregar"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:text="＋&#10;Agregar"
-                android:textColor="@color/finance_secondary_text"
-                android:textSize="13sp"
-                android:clickable="true"
-                android:focusable="true" />
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/navAgregarIcono"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/bg_nav_agregar"
+                    android:src="@drawable/ic_nav_agregar_blanco"
+                    android:padding="10dp"
+                    android:contentDescription="Agregar gasto"
+                    android:clickable="true"
+                    android:focusable="true" />
+
+                <TextView
+                    android:id="@+id/navAgregar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Agregar"
+                    android:textColor="@color/finance_primary"
+                    android:textSize="11sp"
+                    android:clickable="true"
+                    android:focusable="true" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/navDatos"
@@ -581,9 +606,11 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="▥&#10;Datos"
+                android:drawableTop="@drawable/ic_nav_datos"
+                android:drawablePadding="5dp"
+                android:text="Datos"
                 android:textColor="@color/finance_secondary_text"
-                android:textSize="13sp"
+                android:textSize="11sp"
                 android:clickable="true"
                 android:focusable="true" />
 
@@ -593,9 +620,11 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="♙&#10;Perfil"
+                android:drawableTop="@drawable/ic_nav_perfil"
+                android:drawablePadding="5dp"
+                android:text="Perfil"
                 android:textColor="@color/finance_secondary_text"
-                android:textSize="13sp"
+                android:textSize="11sp"
                 android:clickable="true"
                 android:focusable="true" />
 

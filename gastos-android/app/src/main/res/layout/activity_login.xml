@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/finance_background"
+    android:background="#F3F6FC"
     android:fillViewport="true">
 
     <LinearLayout
@@ -19,7 +19,7 @@
             android:orientation="vertical"
             android:gravity="center"
             android:padding="28dp"
-            android:background="@drawable/bg_panel_azul">
+            android:background="#163C83">
 
             <TextView
                 android:layout_width="76dp"
@@ -63,7 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="¡Bienvenido de nuevo!"
-                android:textColor="@color/finance_text"
+                android:textColor="#172B4D"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -72,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:text="Inicia sesión para continuar"
-                android:textColor="@color/finance_secondary_text"
+                android:textColor="#64748B"
                 android:textSize="14sp" />
 
             <!-- Nombre de usuario -->
@@ -81,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="26dp"
                 android:text="Nombre de usuario"
-                android:textColor="@color/finance_text"
+                android:textColor="#334155"
                 android:textStyle="bold" />
 
             <EditText
@@ -95,8 +95,8 @@
                 android:singleLine="true"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                android:textColor="@color/finance_text"
-                android:textColorHint="@color/finance_secondary_text" />
+                android:textColor="#172B4D"
+                android:textColorHint="#94A3B8" />
 
             <!-- Contraseña -->
             <TextView
@@ -104,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="Contraseña"
-                android:textColor="@color/finance_text"
+                android:textColor="#334155"
                 android:textStyle="bold" />
 
             <EditText
@@ -118,8 +118,8 @@
                 android:singleLine="true"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                android:textColor="@color/finance_text"
-                android:textColorHint="@color/finance_secondary_text" />
+                android:textColor="#172B4D"
+                android:textColorHint="#94A3B8" />
 
             <!-- Botón para iniciar sesión -->
             <Button
@@ -138,8 +138,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:text="¿No tienes cuenta? Regístrate"
-                android:textColor="@color/finance_primary"
-                android:backgroundTint="@color/finance_surface" />
+                android:textColor="#2563EB"
+                android:backgroundTint="#FFFFFF" />
 
         </LinearLayout>
 
@@ -150,8 +150,9 @@
             android:layout_marginBottom="16dp"
             android:gravity="center"
             android:text="Control de Gastos • Finanzas personales"
-            android:textColor="@color/finance_secondary_text"
+            android:textColor="#94A3B8"
             android:textSize="12sp" />
 
     </LinearLayout>
 </ScrollView>
+
