@@ -108,19 +108,39 @@
                 android:textColor="@color/finance_text"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/etRegistroPassword"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/bg_campo_login"
-                android:hint="Mínimo 8 caracteres"
-                android:inputType="textPassword"
-                android:singleLine="true"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:textColor="@color/finance_text"
-                android:textColorHint="@color/finance_secondary_text" />
+                android:paddingEnd="10dp">
+
+                <EditText
+                    android:id="@+id/etRegistroPassword"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="Mínimo 8 caracteres"
+                    android:inputType="textPassword"
+                    android:singleLine="true"
+                    android:textColor="@color/finance_text"
+                    android:textColorHint="@color/finance_secondary_text" />
+
+                <TextView
+                    android:id="@+id/btnToggleRegistroPassword"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:text="👁️"
+                    android:textSize="18sp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:contentDescription="Mostrar u ocultar contraseña" />
+            </LinearLayout>
 
             <!-- Confirmar contraseña -->
             <TextView
@@ -131,19 +151,39 @@
                 android:textColor="@color/finance_text"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/etRegistroConfirmarPassword"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/bg_campo_login"
-                android:hint="Repite tu contraseña"
-                android:inputType="textPassword"
-                android:singleLine="true"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:textColor="@color/finance_text"
-                android:textColorHint="@color/finance_secondary_text" />
+                android:paddingEnd="10dp">
+
+                <EditText
+                    android:id="@+id/etRegistroConfirmarPassword"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="Repite tu contraseña"
+                    android:inputType="textPassword"
+                    android:singleLine="true"
+                    android:textColor="@color/finance_text"
+                    android:textColorHint="@color/finance_secondary_text" />
+
+                <TextView
+                    android:id="@+id/btnToggleRegistroConfirmarPassword"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:text="👁️"
+                    android:textSize="18sp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:contentDescription="Mostrar u ocultar contraseña" />
+            </LinearLayout>
 
             <!-- Botón para crear cuenta -->
             <Button

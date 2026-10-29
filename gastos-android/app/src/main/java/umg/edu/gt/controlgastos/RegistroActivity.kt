@@ -1,9 +1,11 @@
-
 package umg.edu.gt.controlgastos
 
 import android.os.Bundle
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -20,11 +22,29 @@ class RegistroActivity : AppCompatActivity() {
         // Conectamos los controles de la pantalla.
         val etUsuario = findViewById<EditText>(R.id.etRegistroUsuario)
         val etPassword = findViewById<EditText>(R.id.etRegistroPassword)
-        val etConfirmar = findViewById<EditText>(
-            R.id.etRegistroConfirmarPassword
-        )
+        val etConfirmar = findViewById<EditText>(R.id.etRegistroConfirmarPassword)
+        val btnTogglePassword = findViewById<TextView>(R.id.btnToggleRegistroPassword)
+        val btnToggleConfirmar = findViewById<TextView>(R.id.btnToggleRegistroConfirmarPassword)
         val btnCrearCuenta = findViewById<Button>(R.id.btnCrearCuenta)
         val btnIrLogin = findViewById<Button>(R.id.btnIrLogin)
+
+        // Función para alternar visibilidad de contraseña.
+        fun configurarTogglePassword(editText: EditText, toggleBtn: TextView?) {
+            toggleBtn?.setOnClickListener {
+                val estaOculto = editText.transformationMethod is PasswordTransformationMethod
+                if (estaOculto) {
+                    editText.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                    toggleBtn.text = "🙈"
+                } else {
+                    editText.transformationMethod = PasswordTransformationMethod.getInstance()
+                    toggleBtn.text = "👁️"
+                }
+                editText.setSelection(editText.text.length)
+            }
+        }
+
+        configurarTogglePassword(etPassword, btnTogglePassword)
+        configurarTogglePassword(etConfirmar, btnToggleConfirmar)
 
         // Preparamos el acceso a la base de datos.
         val database = AppDatabase.obtenerInstancia(this)

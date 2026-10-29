@@ -1,10 +1,12 @@
-
 package umg.edu.gt.controlgastos
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -35,8 +37,22 @@ class LoginActivity : AppCompatActivity() {
         // Controles de la pantalla.
         val etUsuario = findViewById<EditText>(R.id.etLoginUsuario)
         val etPassword = findViewById<EditText>(R.id.etLoginPassword)
+        val btnTogglePassword = findViewById<TextView>(R.id.btnToggleLoginPassword)
         val btnLogin = findViewById<Button>(R.id.btnIniciarSesion)
         val btnRegistro = findViewById<Button>(R.id.btnIrRegistro)
+
+        // Alternar visibilidad de la contraseña.
+        btnTogglePassword?.setOnClickListener {
+            val estaOculto = etPassword.transformationMethod is PasswordTransformationMethod
+            if (estaOculto) {
+                etPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                btnTogglePassword.text = "🙈"
+            } else {
+                etPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+                btnTogglePassword.text = "👁️"
+            }
+            etPassword.setSelection(etPassword.text.length)
+        }
 
         // Conexión con la base de datos.
         val database = AppDatabase.obtenerInstancia(this)
