@@ -26,11 +26,24 @@ class MainActivity : AppCompatActivity() {
     // Permite utilizar los elementos del archivo XML.
     private lateinit var binding: ActivityMainBinding
 
-    // Conecta la lógica de gastos con la base de datos Room.
+
+    // Identifica al usuario que inició sesión.
+    private val usuarioId: Int by lazy {
+        getSharedPreferences(
+            "sesion_usuario",
+            MODE_PRIVATE
+        ).getInt("usuario_id", -1)
+    }
+
+    // Conecta gastos-core con los gastos del usuario actual.
     private val control by lazy {
         val database = AppDatabase.obtenerInstancia(applicationContext)
-        ControlGastos(GastoRepositoryRoom(database.gastoDao()))
+
+        ControlGastos(
+            GastoRepositoryRoom(database.gastoDao(), usuarioId)
+        )
     }
+
     // Recibe el gasto seleccionado para editarlo o eliminarlo.
     private val gastoAdapter = GastoAdapter(
         onEditar = { gasto ->
@@ -146,18 +159,7 @@ class MainActivity : AppCompatActivity() {
 
     // Consulta Room y muestra los gastos en la lista.
     private suspend fun cargarGastos() {
-        val database = AppDatabase.obtenerInstancia(applicationContext)
-
-        val gastos = database.gastoDao().obtenerTodos().map { entidad ->
-            Gasto(
-                id = entidad.id,
-                descripcion = entidad.descripcion,
-                monto = entidad.monto,
-                categoria = Categoria.valueOf(entidad.categoria),
-                fecha = entidad.fecha
-            )
-        }
-
+        val gastos = control.listar()
         gastoAdapter.actualizarGastos(gastos)
     }
 
@@ -194,19 +196,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
 
             // Consulta los gastos guardados en Room.
-            val dao = AppDatabase
-                .obtenerInstancia(applicationContext)
-                .gastoDao()
-
-            val gastos = dao.obtenerTodos().map { entidad ->
-                Gasto(
-                    id = entidad.id,
-                    descripcion = entidad.descripcion,
-                    monto = entidad.monto,
-                    categoria = Categoria.valueOf(entidad.categoria),
-                    fecha = entidad.fecha
-                )
-            }
+            val gastos = control.listar()
 
             // Aplica ambos filtros cuando corresponda.
             val gastosFiltrados = gastos.filter { gasto ->
@@ -312,7 +302,7 @@ class MainActivity : AppCompatActivity() {
                             .gastoDao()
 
                         // Busca el registro original.
-                        val gastoGuardado = dao.obtenerPorId(gasto.id)
+                        val gastoGuardado = dao.obtenerPorId(gasto.id, usuarioId)
 
                         if (gastoGuardado == null) {
                             Toast.makeText(
@@ -325,13 +315,14 @@ class MainActivity : AppCompatActivity() {
                         }
 
                         // Actualiza únicamente los campos editados.
-                        val gastoActualizado = gastoGuardado.copy(
+                        dao.actualizar(
+                            id = gasto.id,
+                            usuarioId = usuarioId,
                             descripcion = nuevaDescripcion,
                             monto = nuevoMonto,
-                            categoria = nuevaCategoria.name
+                            categoria = nuevaCategoria.name,
+                            fecha = gasto.fecha
                         )
-
-                        dao.actualizar(gastoActualizado)
 
                         // Actualiza la lista y el resumen.
                         actualizarResumen()
@@ -371,14 +362,9 @@ class MainActivity : AppCompatActivity() {
     private fun eliminarGasto(gasto: Gasto) {
         lifecycleScope.launch {
 
-            // Obtiene la base de datos.
-            val database = AppDatabase.obtenerInstancia(applicationContext)
-            val dao = database.gastoDao()
+            val exito = control.eliminar(gasto.id)
 
-            // Busca el gasto seleccionado por su identificador.
-            val gastoGuardado = dao.obtenerPorId(gasto.id)
-
-            if (gastoGuardado == null) {
+            if (!exito) {
                 Toast.makeText(
                     this@MainActivity,
                     "No se encontró el gasto",
@@ -386,9 +372,6 @@ class MainActivity : AppCompatActivity() {
                 ).show()
                 return@launch
             }
-
-            // Elimina el gasto de la base de datos.
-            dao.eliminar(gastoGuardado)
 
             // Actualiza el total y la lista.
             actualizarResumen()

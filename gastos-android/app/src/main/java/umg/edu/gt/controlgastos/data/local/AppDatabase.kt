@@ -13,15 +13,13 @@ import androidx.sqlite.db.SupportSQLiteDatabase
         GastoEntity::class,
         UsuarioEntity::class
     ],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
 
-    // Acceso a la tabla de gastos.
     abstract fun gastoDao(): GastoDao
 
-    // Acceso a la tabla de usuarios.
     abstract fun usuarioDao(): UsuarioDao
 
     companion object {
@@ -29,9 +27,11 @@ abstract class AppDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
-        // Actualiza la base de datos sin eliminar los gastos.
+        // Migración 1 → 2: agrega la tabla de usuarios.
         private val MIGRATION_1_2 = object : Migration(1, 2) {
+
             override fun migrate(db: SupportSQLiteDatabase) {
+
                 db.execSQL(
                     """
                     CREATE TABLE IF NOT EXISTS `usuarios` (
@@ -43,7 +43,6 @@ abstract class AppDatabase : RoomDatabase() {
                     """.trimIndent()
                 )
 
-                // Impide registrar nombres de usuario repetidos.
                 db.execSQL(
                     """
                     CREATE UNIQUE INDEX IF NOT EXISTS
@@ -54,7 +53,23 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
+        // Migración 2 → 3: agrega el propietario de cada gasto.
+        private val MIGRATION_2_3 = object : Migration(2, 3) {
+
+            override fun migrate(db: SupportSQLiteDatabase) {
+
+                db.execSQL(
+                    """
+                    ALTER TABLE `gastos`
+                    ADD COLUMN `usuarioId` INTEGER NOT NULL DEFAULT 0
+                    """.trimIndent()
+                )
+            }
+        }
+
+        // Obtiene una instancia de la base de datos.
         fun obtenerInstancia(context: Context): AppDatabase {
+
             return INSTANCE ?: synchronized(this) {
 
                 val instancia = Room.databaseBuilder(
@@ -62,7 +77,10 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "control_gastos.db"
                 )
-                    .addMigrations(MIGRATION_1_2)
+                    .addMigrations(
+                        MIGRATION_1_2,
+                        MIGRATION_2_3
+                    )
                     .build()
 
                 INSTANCE = instancia
