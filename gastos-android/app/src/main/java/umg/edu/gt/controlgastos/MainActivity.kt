@@ -24,6 +24,7 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.content.Intent
 import java.util.Calendar
+import android.view.View
 class MainActivity : AppCompatActivity() {
 
     // Permite utilizar los elementos del archivo XML.
@@ -85,6 +86,29 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         actualizarSaludoUsuario()
+
+        binding.tvToggleRegistro.setOnClickListener {
+            val abierto = binding.contenidoRegistro.visibility == View.VISIBLE
+
+            binding.contenidoRegistro.visibility =
+                if (abierto) View.GONE else View.VISIBLE
+
+            binding.tvToggleRegistro.text =
+                if (abierto) "＋  Registrar nuevo gasto   ▾"
+                else "＋  Registrar nuevo gasto   ▴"
+        }
+
+        binding.tvToggleFiltros.setOnClickListener {
+            val abierto = binding.contenidoFiltros.visibility == View.VISIBLE
+
+            binding.contenidoFiltros.visibility =
+                if (abierto) View.GONE else View.VISIBLE
+
+            binding.tvToggleFiltros.text =
+                if (abierto) "☷  Filtrar movimientos   ▾"
+                else "☷  Filtrar movimientos   ▴"
+        }
+
 
 // Cierra la sesión del usuario actual.
         binding.btnCerrarSesion.setOnClickListener {

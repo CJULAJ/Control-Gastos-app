@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="finance_background">#17212B</color>
+    <color name="finance_surface">#22303E</color>
+    <color name="finance_primary">#64B5F6</color>
+    <color name="finance_text">#FFFFFF</color>
+    <color name="finance_secondary_text">#A8B8C8</color>
+    <color name="finance_border">#344658</color>
+</resources>

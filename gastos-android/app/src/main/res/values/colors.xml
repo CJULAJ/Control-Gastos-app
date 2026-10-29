@@ -7,4 +7,11 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="finance_background">#F3F6FC</color>
+    <color name="finance_surface">#FFFFFF</color>
+    <color name="finance_primary">#3390EC</color>
+    <color name="finance_text">#172B4D</color>
+    <color name="finance_secondary_text">#64748B</color>
+    <color name="finance_border">#E1E7F0</color>
+
 </resources>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- Tarjeta que representa un gasto registrado. -->
+<!-- Tarjeta de cada gasto registrado -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -11,7 +11,7 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Descripción y monto del gasto -->
+    <!-- Descripción y monto -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
             android:layout_weight="1"
             android:layout_marginEnd="12dp"
             android:text="Descripción del gasto"
-            android:textColor="#172B4D"
+            android:textColor="@color/finance_text"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Q 0.00"
-            android:textColor="#163C83"
+            android:textColor="@color/finance_primary"
             android:textSize="19sp"
             android:textStyle="bold" />
 
@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Categoría - Fecha"
-        android:textColor="#64748B"
+        android:textColor="@color/finance_secondary_text"
         android:textSize="14sp" />
 
     <!-- Línea divisoria -->
@@ -56,9 +56,9 @@
         android:layout_height="1dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="12dp"
-        android:background="#E2E8F0" />
+        android:background="@color/finance_border" />
 
-    <!-- Botones de acciones -->
+    <!-- Botones -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -86,3 +86,4 @@
     </LinearLayout>
 
 </LinearLayout>
+

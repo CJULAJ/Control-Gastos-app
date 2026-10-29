@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F3F6FC"
+    android:background="@color/finance_background"
     android:fillViewport="true">
 
     <LinearLayout
@@ -13,23 +12,21 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Encabezado principal -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/bg_panel_azul"
             android:orientation="vertical"
-            android:padding="22dp"
-            android:background="#163C83">
+            android:padding="22dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:letterSpacing="0.12"
                 android:text="CONTROL DE GASTOS"
-                android:textColor="#BFD5FF"
-                android:textSize="12sp"
-                android:letterSpacing="0.12" />
+                android:textColor="#C7D9FF"
+                android:textSize="12sp" />
 
-            <!-- Saludo dinámico -->
             <TextView
                 android:id="@+id/tvSaludoUsuario"
                 android:layout_width="match_parent"
@@ -37,212 +34,251 @@
                 android:layout_marginTop="12dp"
                 android:text="¡Bienvenido!"
                 android:textColor="#FFFFFF"
-                android:textSize="25sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:text="Administra tus finanzas personales"
+                android:text="Tu dinero, más claro cada día"
                 android:textColor="#E2EAFF"
                 android:textSize="14sp" />
 
-            <!-- Tarjeta de resumen -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="22dp"
+                android:background="@drawable/bg_tarjeta_gasto"
                 android:orientation="vertical"
-                android:padding="18dp"
-                android:background="#FFFFFF">
+                android:padding="18dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="RESUMEN DE GASTOS"
-                    android:textColor="#64748B"
+                    android:textColor="@color/finance_secondary_text"
                     android:textSize="12sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvResumen"
+                    android:textColor="@color/finance_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="Cargando resumen..."
-                    android:textColor="#163C83"
                     android:textSize="22sp"
                     android:textStyle="bold" />
-
             </LinearLayout>
-
         </LinearLayout>
 
-        <!-- Formulario de registro -->
+        <!-- Registro desplegable -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:background="@drawable/bg_tarjeta_gasto"
             android:orientation="vertical"
-            android:padding="18dp"
-            android:background="#FFFFFF">
+            android:padding="16dp">
 
             <TextView
+                android:id="@+id/tvToggleRegistro"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="＋ Registrar nuevo gasto"
-                android:textColor="#172B4D"
-                android:textSize="20sp"
+                android:layout_height="56dp"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:contentDescription="Abrir o cerrar el formulario para registrar un gasto"
+                android:text="＋  Registrar nuevo gasto   ▾"
+                android:textColor="@color/finance_text"
+                android:textSize="18sp"
                 android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:text="Descripción"
-                android:textColor="#334155"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/etDescripcion"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:hint="Ej. Almuerzo, transporte..."
-                android:inputType="textCapSentences"
-                android:singleLine="true"
-                android:minHeight="52dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Monto (Q)"
-                android:textColor="#334155"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/etMonto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:hint="0.00"
-                android:inputType="numberDecimal"
-                android:minHeight="52dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Categoría"
-                android:textColor="#334155"
-                android:textStyle="bold" />
-
-            <Spinner
-                android:id="@+id/spCategoria"
-                android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:layout_marginTop="6dp" />
-
-            <Button
-                android:id="@+id/btnGuardar"
-                android:layout_width="match_parent"
-                android:layout_height="54dp"
-                android:layout_marginTop="22dp"
-                android:text="GUARDAR GASTO"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="#2563EB" />
-
-        </LinearLayout>
-
-        <!-- Filtros -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:orientation="vertical"
-            android:padding="18dp"
-            android:background="#FFFFFF">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Filtrar movimientos"
-                android:textColor="#172B4D"
-                android:textSize="19sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:text="Categoría"
-                android:textColor="#334155" />
-
-            <Spinner
-                android:id="@+id/spFiltroCategoria"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:contentDescription="Filtrar gastos por categoría" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Fecha"
-                android:textColor="#334155" />
-
-            <EditText
-                android:id="@+id/etFiltroFecha"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="AAAA-MM-DD"
-                android:inputType="date"
-                android:singleLine="true"
-                android:minHeight="50dp" />
 
             <LinearLayout
+                android:id="@+id/contenidoRegistro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Descripción"
+                    android:textColor="@color/finance_text"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etDescripcion"
+                    android:textColor="@color/finance_text"
+                    android:textColorHint="@color/finance_secondary_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_campo_login"
+                    android:hint="Ej. Almuerzo, transporte..."
+                    android:inputType="textCapSentences"
+                    android:paddingHorizontal="14dp"
+                    android:singleLine="true" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Monto (Q)"
+                    android:textColor="#334155"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etMonto"
+                    android:textColor="@color/finance_text"
+                    android:textColorHint="@color/finance_secondary_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_campo_login"
+                    android:hint="0.00"
+                    android:inputType="numberDecimal"
+                    android:paddingHorizontal="14dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Categoría"
+                    android:textColor="#334155"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spCategoria"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_campo_login"
+                    android:paddingHorizontal="12dp" />
 
                 <Button
-                    android:id="@+id/btnFiltrar"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
-                    android:text="FILTRAR"
-                    android:backgroundTint="#2563EB" />
-
-                <Button
-                    android:id="@+id/btnMostrarTodos"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="VER TODOS"
-                    android:backgroundTint="#64748B" />
-
+                    android:id="@+id/btnGuardar"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp"
+                    android:layout_marginTop="22dp"
+                    android:backgroundTint="#2563EB"
+                    android:text="GUARDAR GASTO"
+                    android:textColor="#FFFFFF" />
             </LinearLayout>
-
         </LinearLayout>
 
-        <!-- Lista de movimientos -->
+        <!-- Filtros desplegables -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/bg_tarjeta_gasto"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/tvToggleFiltros"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:contentDescription="Abrir o cerrar los filtros de movimientos"
+                android:text="☷  Filtrar movimientos   ▾"
+                android:textColor="@color/finance_text"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/contenidoFiltros"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Categoría"
+                    android:textColor="#334155" />
+
+                <Spinner
+                    android:id="@+id/spFiltroCategoria"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_campo_login"
+                    android:contentDescription="Filtrar gastos por categoría"
+                    android:paddingHorizontal="12dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Fecha"
+                    android:textColor="#334155" />
+
+                <EditText
+                    android:id="@+id/etFiltroFecha"
+                    android:textColor="@color/finance_text"
+                    android:textColorHint="@color/finance_secondary_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_campo_login"
+                    android:hint="AAAA-MM-DD"
+                    android:inputType="date"
+                    android:paddingHorizontal="14dp"
+                    android:singleLine="true" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnFiltrar"
+                        android:layout_width="0dp"
+                        android:layout_height="52dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:backgroundTint="#2563EB"
+                        android:text="FILTRAR"
+                        android:textColor="#FFFFFF" />
+
+                    <Button
+                        android:id="@+id/btnMostrarTodos"
+                        android:layout_width="0dp"
+                        android:layout_height="52dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="#64748B"
+                        android:text="VER TODOS"
+                        android:textColor="#FFFFFF" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- La gráfica irá aquí en el siguiente paso -->
+
+        <!-- Mis movimientos: se conserva el adaptador y sus tarjetas -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:background="@drawable/bg_tarjeta_gasto"
             android:orientation="vertical"
-            android:padding="18dp"
-            android:background="#FFFFFF">
+            android:padding="16dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Mis movimientos"
-                android:textColor="#172B4D"
+                android:textColor="@color/finance_text"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -252,19 +288,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:nestedScrollingEnabled="false" />
-
         </LinearLayout>
 
-        <!-- Botón de cierre de sesión -->
         <Button
             android:id="@+id/btnCerrarSesion"
             android:layout_width="match_parent"
             android:layout_height="54dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
+            android:backgroundTint="#B91C1C"
             android:text="CERRAR SESIÓN"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#DC2626" />
-
+            android:textColor="#FFFFFF" />
     </LinearLayout>
 </ScrollView>
+
