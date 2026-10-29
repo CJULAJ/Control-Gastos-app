@@ -58,10 +58,36 @@ class MainActivity : AppCompatActivity() {
             android.R.layout.simple_spinner_dropdown_item,
             Categoria.entries
         )
+        // Prepara las categorías disponibles para filtrar.
+        val categoriasFiltro = listOf("Todas las categorías") +
+                Categoria.entries.map { it.name }
+
+// Muestra las categorías en el selector de filtros.
+        binding.spFiltroCategoria.adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            categoriasFiltro
+        )
 
         // Guarda un gasto al presionar el botón.
         binding.btnGuardar.setOnClickListener {
             guardar()
+        }
+
+// Aplica los filtros al presionar el botón Filtrar.
+        binding.btnFiltrar.setOnClickListener {
+            filtrarGastos()
+        }
+
+// Limpia los filtros y muestra todos los gastos.
+        binding.btnMostrarTodos.setOnClickListener {
+
+            binding.spFiltroCategoria.setSelection(0)
+            binding.etFiltroFecha.text.clear()
+
+            lifecycleScope.launch {
+                cargarGastos()
+            }
         }
 
         // Muestra los gastos guardados al abrir la aplicación.
@@ -87,7 +113,78 @@ class MainActivity : AppCompatActivity() {
 
         gastoAdapter.actualizarGastos(gastos)
     }
-    // Abre una ventana para editar el gasto seleccionado.
+
+
+    // Filtra los gastos por categoría y fecha.
+    private fun filtrarGastos() {
+
+        // Obtiene los filtros seleccionados.
+        val categoriaSeleccionada =
+            binding.spFiltroCategoria.selectedItem.toString()
+
+        val fechaSeleccionada =
+            binding.etFiltroFecha.text.toString().trim()
+
+        // Comprueba que la fecha tenga un formato válido.
+        if (fechaSeleccionada.isNotEmpty()) {
+            val formato = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+            formato.isLenient = false
+
+            val fechaValida = try {
+                val fecha = formato.parse(fechaSeleccionada)
+                fecha != null &&
+                        formato.format(fecha) == fechaSeleccionada
+            } catch (e: java.text.ParseException) {
+                false
+            }
+
+            if (!fechaValida) {
+                binding.etFiltroFecha.error = "Usa el formato AAAA-MM-DD"
+                return
+            }
+        }
+
+        lifecycleScope.launch {
+
+            // Consulta los gastos guardados en Room.
+            val dao = AppDatabase
+                .obtenerInstancia(applicationContext)
+                .gastoDao()
+
+            val gastos = dao.obtenerTodos().map { entidad ->
+                Gasto(
+                    id = entidad.id,
+                    descripcion = entidad.descripcion,
+                    monto = entidad.monto,
+                    categoria = Categoria.valueOf(entidad.categoria),
+                    fecha = entidad.fecha
+                )
+            }
+
+            // Aplica ambos filtros cuando corresponda.
+            val gastosFiltrados = gastos.filter { gasto ->
+
+                val coincideCategoria =
+                    categoriaSeleccionada == "Todas las categorías" ||
+                            gasto.categoria.name == categoriaSeleccionada
+
+                val coincideFecha =
+                    fechaSeleccionada.isEmpty() ||
+                            gasto.fecha == fechaSeleccionada
+
+                coincideCategoria && coincideFecha
+            }
+
+            // Muestra únicamente los gastos encontrados.
+            gastoAdapter.actualizarGastos(gastosFiltrados)
+
+            Toast.makeText(
+                this@MainActivity,
+                "${gastosFiltrados.size} gastos encontrados",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
 
 
     // Abre el formulario y permite modificar un gasto.
