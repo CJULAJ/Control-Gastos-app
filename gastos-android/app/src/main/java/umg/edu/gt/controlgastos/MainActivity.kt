@@ -187,11 +187,30 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-    // Consulta Room y muestra los gastos en la lista.
     private suspend fun cargarGastos() {
-        val gastos = control.listar()
-        gastoAdapter.actualizarGastos(gastos)
+        try {
+            // Consulta los gastos del usuario actual.
+            val gastos = control.listar()
+
+            // Actualiza la lista únicamente si la consulta funciona.
+            gastoAdapter.actualizarGastos(gastos)
+
+        } catch (e: kotlinx.coroutines.CancellationException) {
+            throw e
+
+        } catch (e: Exception) {
+            android.util.Log.e(
+                "ControlGastos",
+                "Error al consultar los gastos",
+                e
+            )
+
+            Toast.makeText(
+                this@MainActivity,
+                "No se pudieron cargar los gastos. Intenta nuevamente.",
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 
 
