@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F4F7FC"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="28dp"
+        android:gravity="center_horizontal">
+
+        <!-- Icono principal -->
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:gravity="center"
+            android:text="💰"
+            android:textSize="42sp"
+            android:background="#E3EDFF"
+            android:layout_marginTop="48dp" />
+
+        <!-- Título -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Crear cuenta"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:textColor="#172B4D"
+            android:gravity="center"
+            android:layout_marginTop="24dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Comienza a organizar tus gastos personales"
+            android:textSize="15sp"
+            android:textColor="#64748B"
+            android:gravity="center"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="32dp" />
+
+        <!-- Nombre de usuario -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nombre de usuario"
+            android:textColor="#334155"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/etRegistroUsuario"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Ingresa tu usuario"
+            android:inputType="text"
+            android:singleLine="true"
+            android:padding="14dp"
+            android:backgroundTint="#2563EB" />
+
+        <!-- Contraseña -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Contraseña"
+            android:textColor="#334155"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/etRegistroPassword"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Mínimo 8 caracteres"
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:padding="14dp"
+            android:backgroundTint="#2563EB" />
+
+        <!-- Confirmar contraseña -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Confirmar contraseña"
+            android:textColor="#334155"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/etRegistroConfirmarPassword"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Repite tu contraseña"
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:padding="14dp"
+            android:backgroundTint="#2563EB" />
+
+        <!-- Botón para registrar -->
+        <Button
+            android:id="@+id/btnCrearCuenta"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="CREAR CUENTA"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#2563EB"
+            android:layout_marginTop="32dp" />
+
+        <!-- Volver al inicio de sesión -->
+        <Button
+            android:id="@+id/btnIrLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="¿Ya tienes cuenta? Inicia sesión"
+            android:textColor="#2563EB"
+            android:backgroundTint="#F4F7FC"
+            android:layout_marginTop="12dp" />
+
+    </LinearLayout>
+</ScrollView>
