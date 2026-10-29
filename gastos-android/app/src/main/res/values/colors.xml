@@ -12,6 +12,7 @@
     <color name="finance_primary">#3390EC</color>
     <color name="finance_text">#172B4D</color>
     <color name="finance_secondary_text">#64748B</color>
+    <color name="finance_nav_unselected">#64748B</color>
     <color name="finance_border">#E1E7F0</color>
 
 </resources>

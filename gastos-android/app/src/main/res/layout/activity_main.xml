@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/finance_background"
-    android:fillViewport="true">
 
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/finance_background">
+
+        <ScrollView
+            android:id="@+id/main"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true">
+
+
+        <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -16,6 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_panel_azul"
+            android:id="@+id/seccionInicio"
             android:orientation="vertical"
             android:padding="22dp">
 
@@ -70,11 +80,88 @@
                     android:text="Cargando resumen..."
                     android:textSize="22sp"
                     android:textStyle="bold" />
+
             </LinearLayout>
+        </LinearLayout>
+
+        <!-- RESUMEN EN INICIO (Días / Semana) -->
+        <LinearLayout
+            android:id="@+id/seccionResumenInicio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <!-- GASTOS DE HOY -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/bg_tarjeta_gasto"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Gastado hoy"
+                        android:textColor="@color/finance_secondary_text"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tvGastosHoy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Q 0.00"
+                        android:textColor="@color/finance_primary"
+                        android:textSize="21sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <!-- GASTOS DE LA SEMANA -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="6dp"
+                    android:background="@drawable/bg_tarjeta_gasto"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Últimos 7 días"
+                        android:textColor="@color/finance_secondary_text"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tvGastosSemana"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Q 0.00"
+                        android:textColor="@color/finance_primary"
+                        android:textSize="21sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
         </LinearLayout>
 
         <!-- Registro desplegable -->
         <LinearLayout
+            android:id="@+id/seccionAgregar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -172,6 +259,7 @@
 
         <!-- Filtros desplegables -->
         <LinearLayout
+            android:id="@+id/seccionFiltros"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
@@ -264,9 +352,63 @@
         </LinearLayout>
 
         <!-- La gráfica irá aquí en el siguiente paso -->
+            <!-- SECCIÓN DATOS -->
+            <LinearLayout
+                android:id="@+id/seccionDatos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Estadísticas de gastos"
+                    android:textColor="@color/finance_text"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/bg_tarjeta_gasto"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Gastos de los últimos 7 días"
+                        android:textColor="@color/finance_secondary_text"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvTotalSemanal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Q 0.00"
+                        android:textColor="@color/finance_primary"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="8dp" />
+
+                    <LinearLayout
+                        android:id="@+id/contenedorGrafica"
+                        android:layout_width="match_parent"
+                        android:layout_height="220dp"
+                        android:orientation="horizontal"
+                        android:gravity="bottom"
+                        android:layout_marginTop="20dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         <!-- Mis movimientos: se conserva el adaptador y sus tarjetas -->
         <LinearLayout
+            android:id="@+id/seccionMovimientos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -300,5 +442,82 @@
             android:text="CERRAR SESIÓN"
             android:textColor="#FFFFFF" />
     </LinearLayout>
-</ScrollView>
+
+        </ScrollView>
+
+        <!-- Navegación inferior fija -->
+        <LinearLayout
+            android:id="@+id/barraNavegacion"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingHorizontal="6dp"
+            android:background="@color/finance_surface"
+            android:elevation="8dp">
+
+            <TextView
+                android:id="@+id/navInicio"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="⌂&#10;Inicio"
+                android:textColor="@color/finance_primary"
+                android:textSize="13sp"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <TextView
+                android:id="@+id/navGastos"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="☷&#10;Gastos"
+                android:textColor="@color/finance_secondary_text"
+                android:textSize="13sp"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <TextView
+                android:id="@+id/navAgregar"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="＋&#10;Agregar"
+                android:textColor="@color/finance_secondary_text"
+                android:textSize="13sp"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <TextView
+                android:id="@+id/navDatos"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="▥&#10;Datos"
+                android:textColor="@color/finance_secondary_text"
+                android:textSize="13sp"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <TextView
+                android:id="@+id/navPerfil"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="♙&#10;Perfil"
+                android:textColor="@color/finance_secondary_text"
+                android:textSize="13sp"
+                android:clickable="true"
+                android:focusable="true" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
 

@@ -5,5 +5,6 @@
     <color name="finance_primary">#64B5F6</color>
     <color name="finance_text">#FFFFFF</color>
     <color name="finance_secondary_text">#A8B8C8</color>
+    <color name="finance_nav_unselected">#A8B8C8</color>
     <color name="finance_border">#344658</color>
 </resources>

@@ -1,14 +1,25 @@
 package umg.edu.gt.controlgastos
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import edu.umg.programacion2.gastos.modelo.Categoria
 import edu.umg.programacion2.gastos.modelo.Gasto
 import edu.umg.programacion2.gastos.servicio.ControlGastos
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -16,15 +27,10 @@ import umg.edu.gt.controlgastos.data.local.AppDatabase
 import umg.edu.gt.controlgastos.data.local.GastoRepositoryRoom
 import umg.edu.gt.controlgastos.databinding.ActivityMainBinding
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
-import androidx.appcompat.app.AlertDialog
-import android.view.LayoutInflater
-import android.widget.EditText
-import android.widget.Spinner
-import android.content.Intent
-import java.util.Calendar
-import android.view.View
+
 class MainActivity : AppCompatActivity() {
 
     // Permite utilizar los elementos del archivo XML.
@@ -186,7 +192,86 @@ class MainActivity : AppCompatActivity() {
             actualizarResumen()
             cargarGastos()
         }
+
+
+        binding.navInicio.setOnClickListener {
+            mostrarSeccion("inicio")
+        }
+
+        binding.navGastos.setOnClickListener {
+            mostrarSeccion("gastos")
+        }
+
+        binding.navAgregar.setOnClickListener {
+            mostrarSeccion("agregar")
+        }
+
+        binding.navDatos.setOnClickListener {
+            mostrarSeccion("datos")
+        }
+
+        binding.navPerfil.setOnClickListener {
+            mostrarSeccion("perfil")
+        }
+
+// Muestra Inicio al abrir la aplicación.
+        mostrarSeccion("inicio")
+
+
     }
+
+    private fun mostrarSeccion(seccion: String) {
+
+        // Oculta las secciones existentes.
+        binding.seccionInicio.visibility = View.GONE
+        binding.seccionResumenInicio.visibility = View.GONE
+        binding.seccionMovimientos.visibility = View.GONE
+        binding.seccionAgregar.visibility = View.GONE
+        binding.seccionFiltros.visibility = View.GONE
+        binding.btnCerrarSesion.visibility = View.GONE
+        binding.seccionDatos.visibility = View.GONE
+
+        when (seccion) {
+            "inicio" -> {
+                binding.seccionInicio.visibility = View.VISIBLE
+                binding.seccionResumenInicio.visibility = View.VISIBLE
+
+                // Mostrar filtros y movimientos debajo del resumen.
+                binding.seccionFiltros.visibility = View.VISIBLE
+                binding.seccionMovimientos.visibility = View.VISIBLE
+
+                // Actualizar las tarjetas del inicio.
+                actualizarResumenInicio()
+            }
+
+            "gastos" -> {
+                binding.seccionMovimientos.visibility = View.VISIBLE
+                binding.seccionFiltros.visibility = View.VISIBLE
+            }
+
+            "agregar" -> {
+                binding.seccionAgregar.visibility = View.VISIBLE
+                binding.contenidoRegistro.visibility = View.VISIBLE
+                binding.tvToggleRegistro.text =
+                    "＋  Registrar nuevo gasto   ▴"
+            }
+
+            "datos" -> {
+                binding.seccionDatos.visibility = View.VISIBLE
+                cargarEstadisticas()
+            }
+
+            "perfil" -> {
+                binding.btnCerrarSesion.visibility = View.VISIBLE
+            }
+        }
+
+        // Regresa al inicio del contenido.
+        binding.main.post {
+            binding.main.scrollTo(0, 0)
+        }
+    }
+
 
 
     private fun actualizarSaludoUsuario() {
@@ -557,6 +642,54 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun actualizarResumenInicio() {
+        lifecycleScope.launch {
+            try {
+                val gastos = control.listar()
+
+                val formato = SimpleDateFormat(
+                    "yyyy-MM-dd",
+                    Locale.US
+                )
+
+                val hoy = formato.format(Date())
+
+                val calendario = Calendar.getInstance()
+                calendario.add(Calendar.DAY_OF_YEAR, -6)
+
+                val inicioPeriodo = formato.format(calendario.time)
+
+                val totalHoy = gastos
+                    .filter { it.fecha == hoy }
+                    .sumOf { it.monto.toDouble() }
+
+                val totalSemana = gastos
+                    .filter {
+                        it.fecha >= inicioPeriodo &&
+                        it.fecha <= hoy
+                    }
+                    .sumOf { it.monto.toDouble() }
+
+                binding.tvGastosHoy.text = String.format(
+                    Locale.US,
+                    "Q %.2f",
+                    totalHoy
+                )
+
+                binding.tvGastosSemana.text = String.format(
+                    Locale.US,
+                    "Q %.2f",
+                    totalSemana
+                )
+
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Log.e("MainActivity", "Error al actualizar Inicio", e)
+            }
+        }
+    }
+
     private suspend fun actualizarResumen() {
         try {
             // Obtiene el resumen de gastos del usuario actual.
@@ -564,6 +697,7 @@ class MainActivity : AppCompatActivity() {
 
             // Actualiza el texto únicamente si la consulta funciona.
             binding.tvResumen.text = resumen
+            actualizarResumenInicio()
 
         } catch (e: kotlinx.coroutines.CancellationException) {
             throw e
@@ -590,5 +724,133 @@ class MainActivity : AppCompatActivity() {
             Locale.US
         ).format(Date())
     }
+
+    private fun cargarEstadisticas() {
+
+        lifecycleScope.launch {
+            try {
+                // Obtener los gastos reales del usuario actual.
+                val gastos = control.listar()
+
+                val formatoFecha = SimpleDateFormat(
+                    "yyyy-MM-dd",
+                    Locale.US
+                )
+
+                val formatoDia = SimpleDateFormat(
+                    "EEE",
+                    Locale("es", "GT")
+                )
+
+                val calendario = Calendar.getInstance()
+
+                // Preparar los últimos siete días.
+                val fechas = mutableListOf<String>()
+                val nombresDias = mutableListOf<String>()
+
+                for (i in 6 downTo 0) {
+                    val dia = Calendar.getInstance()
+                    dia.add(Calendar.DAY_OF_YEAR, -i)
+
+                    fechas.add(formatoFecha.format(dia.time))
+                    nombresDias.add(formatoDia.format(dia.time))
+                }
+
+                // Calcular cuánto se gastó cada día.
+                val totales = fechas.map { fecha ->
+                    gastos
+                        .filter { it.fecha == fecha }
+                        .sumOf { it.monto.toDouble() }
+                }
+
+                val totalSemanal = totales.sum()
+
+                binding.tvTotalSemanal.text =
+                    String.format(
+                        Locale.US,
+                        "Q %.2f",
+                        totalSemanal
+                    )
+
+                // Limpiar la gráfica anterior.
+                binding.contenedorGrafica.removeAllViews()
+
+                val maximo = totales.maxOrNull() ?: 0.0
+
+                // Crear las siete barras.
+                for (i in totales.indices) {
+
+                    val columna = LinearLayout(this@MainActivity).apply {
+                        orientation = LinearLayout.VERTICAL
+                        gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
+
+                        layoutParams = LinearLayout.LayoutParams(
+                            0,
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            1f
+                        )
+                    }
+
+                    val altura = if (maximo > 0) {
+                        ((totales[i] / maximo) * 150).toInt()
+                            .coerceAtLeast(if (totales[i] > 0) 4 else 0)
+                    } else {
+                        0
+                    }
+
+                    val barra = android.view.View(this@MainActivity).apply {
+                        setBackgroundColor(
+                            androidx.core.content.ContextCompat.getColor(
+                                this@MainActivity,
+                                R.color.finance_primary
+                            )
+                        )
+
+                        layoutParams = LinearLayout.LayoutParams(
+                            22.dp(),
+                            altura.dp()
+                        )
+                    }
+
+                    val etiqueta = TextView(this@MainActivity).apply {
+                        text = nombresDias[i]
+                        textSize = 11f
+                        gravity = Gravity.CENTER
+                        setTextColor(
+                            androidx.core.content.ContextCompat.getColor(
+                                this@MainActivity,
+                                R.color.finance_secondary_text
+                            )
+                        )
+                    }
+
+                    columna.addView(barra)
+                    columna.addView(etiqueta)
+
+                    binding.contenedorGrafica.addView(columna)
+                }
+
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Log.e(
+                    "MainActivity",
+                    "Error al cargar estadísticas",
+                    e
+                )
+
+                Toast.makeText(
+                    this@MainActivity,
+                    "No se pudieron cargar las estadísticas",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    private fun Int.dp(): Int {
+        return (this * resources.displayMetrics.density).toInt()
+    }
+
 }
 

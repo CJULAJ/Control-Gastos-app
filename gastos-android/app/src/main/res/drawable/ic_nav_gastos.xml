@@ -1,0 +1,22 @@
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="@color/finance_nav_unselected"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M8,6 H21
+                          M8,12 H21
+                          M8,18 H21
+                          M3,6 H4
+                          M3,12 H4
+                          M3,18 H4" />
+
+</vector>
+
+
