@@ -418,17 +418,28 @@ class MainActivity : AppCompatActivity() {
     }
     // Valida los datos y registra un nuevo gasto.
     private fun guardar() {
+
+        val descripcion = binding.etDescripcion.text.toString().trim()
         val monto = binding.etMonto.text.toString().toDoubleOrNull()
 
-        // Evita guardar montos incorrectos.
-        if (monto == null || monto <= 0) {
-            binding.etMonto.error = "Ingresa un monto mayor que cero"
+// Comprueba que la descripción no esté vacía.
+        if (descripcion.isEmpty()) {
+            binding.etDescripcion.error = "Ingresa una descripción"
+            binding.etDescripcion.requestFocus()
             return
         }
 
+// Comprueba que el monto sea válido.
+        if (monto == null || !monto.isFinite() || monto <= 0.0) {
+            binding.etMonto.error = "Ingresa un monto válido mayor que cero"
+            binding.etMonto.requestFocus()
+            return
+        }
+
+
         // Obtiene los datos escritos por el usuario.
         val gasto = Gasto(
-            descripcion = binding.etDescripcion.text.toString().trim(),
+            descripcion = descripcion,
             monto = monto,
             categoria = binding.spCategoria.selectedItem as Categoria,
             fecha = fechaDeHoy()
