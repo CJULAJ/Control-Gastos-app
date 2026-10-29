@@ -488,7 +488,7 @@
                 android:nestedScrollingEnabled="false" />
         </LinearLayout>
 
-        <!-- SECCIÓN PERFIL -->
+        <!-- SECCIÓN PERFIL PROFESIONAL -->
         <LinearLayout
             android:id="@+id/seccionPerfil"
             android:layout_width="match_parent"
@@ -496,41 +496,145 @@
             android:orientation="vertical"
             android:visibility="gone">
 
+            <!-- Tarjeta de Encabezado / Avatar -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@drawable/bg_tarjeta_gasto"
-                android:padding="20dp">
+                android:gravity="center_horizontal"
+                android:background="@drawable/bg_panel_azul"
+                android:padding="24dp">
 
+                <!-- Avatar Circular -->
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="MI PERFIL"
-                    android:textColor="@color/finance_secondary_text"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
+                    android:id="@+id/tvAvatarPerfil"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:gravity="center"
+                    android:text="👤"
+                    android:textColor="#FFFFFF"
+                    android:textSize="32sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_icono_login" />
 
                 <TextView
                     android:id="@+id/tvNombrePerfil"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
-                    android:text="Cargando usuario..."
-                    android:textColor="@color/finance_text"
-                    android:textSize="24sp"
+                    android:text="Usuario"
+                    android:textColor="#FFFFFF"
+                    android:textSize="22sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:id="@+id/tvUsuarioTagPerfil"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Mi cuenta de Control de Gastos"
-                    android:textColor="@color/finance_secondary_text"
-                    android:textSize="14sp" />
+                    android:text="Cuenta Personal • Activa"
+                    android:textColor="#DCE8FF"
+                    android:textSize="13sp" />
 
             </LinearLayout>
 
+            <!-- Resumen Estadístico del Usuario (3 Tarjetas) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <!-- Total Gastado -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/bg_tarjeta_gasto"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Total gastado"
+                        android:textColor="@color/finance_secondary_text"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:id="@+id/tvResumenPerfil"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="Q 0.00"
+                        android:textColor="@color/finance_primary"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <!-- Total Movimientos -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="3dp"
+                    android:background="@drawable/bg_tarjeta_gasto"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Movimientos"
+                        android:textColor="@color/finance_secondary_text"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:id="@+id/tvTotalMovimientosPerfil"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="0 registros"
+                        android:textColor="@color/finance_text"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <!-- Gastado Hoy -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="6dp"
+                    android:background="@drawable/bg_tarjeta_gasto"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Gastado hoy"
+                        android:textColor="@color/finance_secondary_text"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:id="@+id/tvGastosHoyPerfil"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="Q 0.00"
+                        android:textColor="@color/finance_text"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Tarjeta de Detalles de Seguridad de Cuenta -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -542,29 +646,89 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="RESUMEN DE MIS GASTOS"
+                    android:text="INFORMACIÓN Y SEGURIDAD"
                     android:textColor="@color/finance_secondary_text"
-                    android:textSize="13sp"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/tvResumenPerfil"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="Cargando resumen..."
-                    android:textColor="@color/finance_text"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:layout_marginTop="14dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
 
-                <TextView
-                    android:id="@+id/tvGastosHoyPerfil"
+                    <TextView
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:gravity="center"
+                        android:text="👤"
+                        android:textSize="18sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Cuenta local aislada"
+                            android:textColor="@color/finance_text"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Tus registros pertenecen únicamente a tu sesión"
+                            android:textColor="@color/finance_secondary_text"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="14dp"
+                    android:background="@color/finance_border" />
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="Gastado hoy: Q 0.00"
-                    android:textColor="@color/finance_primary"
-                    android:textSize="16sp" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:gravity="center"
+                        android:text="🛡️"
+                        android:textSize="18sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Seguridad de contraseña"
+                            android:textColor="@color/finance_text"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Encriptación con PBKDF2 + Sal aleatoria"
+                            android:textColor="@color/finance_secondary_text"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </LinearLayout>
 
             </LinearLayout>
 

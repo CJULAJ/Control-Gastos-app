@@ -7,32 +7,63 @@
     android:orientation="vertical"
     android:padding="20dp">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Descripción"
+        android:textColor="@color/finance_text"
+        android:textStyle="bold" />
+
     <!-- Permite cambiar la descripción. -->
     <EditText
         android:id="@+id/etEditarDescripcion"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="48dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/bg_campo_login"
+        android:paddingHorizontal="14dp"
+        android:textColor="@color/finance_text"
+        android:textColorHint="@color/finance_secondary_text"
         android:hint="Descripción del gasto"
         android:inputType="textCapSentences"
-        android:maxLines="2" />
+        android:singleLine="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Monto (Q)"
+        android:textColor="@color/finance_text"
+        android:textStyle="bold" />
 
     <!-- Permite cambiar el monto. -->
     <EditText
         android:id="@+id/etEditarMonto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:layout_marginTop="12dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/bg_campo_login"
+        android:paddingHorizontal="14dp"
+        android:textColor="@color/finance_text"
+        android:textColorHint="@color/finance_secondary_text"
         android:hint="Monto en quetzales"
         android:inputType="numberDecimal" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Categoría"
+        android:textColor="@color/finance_text"
+        android:textStyle="bold" />
 
     <!-- Permite seleccionar otra categoría. -->
     <Spinner
         android:id="@+id/spEditarCategoria"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:layout_marginTop="12dp" />
+        android:layout_height="52dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/bg_campo_login"
+        android:paddingHorizontal="12dp" />
 
 </LinearLayout>

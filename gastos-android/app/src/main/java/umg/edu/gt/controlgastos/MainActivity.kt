@@ -1023,36 +1023,36 @@ class MainActivity : AppCompatActivity() {
                         .buscarPorId(usuarioId)
                 }
 
-                binding.tvNombrePerfil.text =
-                    usuario?.nombreUsuario ?: "Usuario"
+                val nombre = usuario?.nombreUsuario ?: "Usuario"
+                binding.tvNombrePerfil.text = nombre
+                binding.tvUsuarioTagPerfil.text = "@$nombre • Cuenta Activa"
+
+                // Inicial para el Avatar circular.
+                val inicial = nombre.firstOrNull()?.uppercaseChar()?.toString() ?: "👤"
+                binding.tvAvatarPerfil.text = inicial
 
                 // Consultar únicamente sus gastos.
                 val gastos = control.listar()
 
-                val total = gastos.sumOf {
-                    it.monto.toDouble()
-                }
-
+                val total = gastos.sumOf { it.monto.toDouble() }
                 val hoy = fechaDeHoy()
-
                 val totalHoy = gastos
                     .filter { it.fecha == hoy }
                     .sumOf { it.monto.toDouble() }
 
-                binding.tvResumenPerfil.text =
-                    String.format(
-                        Locale.US,
-                        "%d gastos · Total: Q %.2f",
-                        gastos.size,
-                        total
-                    )
+                binding.tvResumenPerfil.text = String.format(
+                    Locale.US,
+                    "Q %.2f",
+                    total
+                )
 
-                binding.tvGastosHoyPerfil.text =
-                    String.format(
-                        Locale.US,
-                        "Gastado hoy: Q %.2f",
-                        totalHoy
-                    )
+                binding.tvTotalMovimientosPerfil.text = "${gastos.size} registros"
+
+                binding.tvGastosHoyPerfil.text = String.format(
+                    Locale.US,
+                    "Q %.2f",
+                    totalHoy
+                )
 
             } catch (e: CancellationException) {
                 throw e
