@@ -744,17 +744,8 @@ class MainActivity : AppCompatActivity() {
                 // Obtener los gastos reales del usuario actual.
                 val gastos = control.listar()
 
-                val formatoFecha = SimpleDateFormat(
-                    "yyyy-MM-dd",
-                    Locale.US
-                )
-
-                val formatoDia = SimpleDateFormat(
-                    "EEE",
-                    Locale("es", "GT")
-                )
-
-                val calendario = Calendar.getInstance()
+                val formatoFecha = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+                val formatoDia = SimpleDateFormat("EEE", Locale("es", "GT"))
 
                 // Preparar los últimos siete días.
                 val fechas = mutableListOf<String>()
@@ -768,7 +759,7 @@ class MainActivity : AppCompatActivity() {
                     nombresDias.add(formatoDia.format(dia.time))
                 }
 
-                // Calcular cuánto se gastó cada día.
+                // Calcular gasto diario de la semana.
                 val totales = fechas.map { fecha ->
                     gastos
                         .filter { it.fecha == fecha }
@@ -776,20 +767,43 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 val totalSemanal = totales.sum()
+                val promedioDiario = totalSemanal / 7.0
+                val maximo = totales.maxOrNull() ?: 0.0
+                val indiceMaximo = totales.indexOf(maximo)
 
-                binding.tvTotalSemanal.text =
-                    String.format(
+                binding.tvTotalSemanal.text = String.format(
+                    Locale.US,
+                    "Q %.2f",
+                    totalSemanal
+                )
+
+                binding.tvPromedioDiario.text = String.format(
+                    Locale.US,
+                    "Promedio: Q %.2f/día",
+                    promedioDiario
+                )
+
+                if (maximo > 0.0 && indiceMaximo >= 0) {
+                    val diaNombre = nombresDias[indiceMaximo].replace(".", "").replaceFirstChar { it.uppercase() }
+                    binding.tvDiaMaximo.text = String.format(
                         Locale.US,
-                        "Q %.2f",
-                        totalSemanal
+                        "Mayor gasto: %s (Q %.2f)",
+                        diaNombre,
+                        maximo
                     )
+                } else {
+                    binding.tvDiaMaximo.text = "Sin gastos registrados esta semana"
+                }
 
-                // Limpiar la gráfica anterior.
+                // Limpiar gráfica anterior.
                 binding.contenedorGrafica.removeAllViews()
 
-                val maximo = totales.maxOrNull() ?: 0.0
+                val colorPrimario = androidx.core.content.ContextCompat.getColor(this@MainActivity, R.color.finance_primary)
+                val colorSecundario = androidx.core.content.ContextCompat.getColor(this@MainActivity, R.color.finance_secondary_text)
+                val colorBorde = androidx.core.content.ContextCompat.getColor(this@MainActivity, R.color.finance_border)
+                val colorTexto = androidx.core.content.ContextCompat.getColor(this@MainActivity, R.color.finance_text)
 
-                // Crear las siete barras.
+                // Renderizar las 7 columnas con barras pildora redondeadas.
                 for (i in totales.indices) {
 
                     val columna = LinearLayout(this@MainActivity).apply {
@@ -803,43 +817,168 @@ class MainActivity : AppCompatActivity() {
                         )
                     }
 
+                    val monto = totales[i]
+
+                    // 1. Etiqueta del monto arriba de la barra.
+                    val tvMonto = TextView(this@MainActivity).apply {
+                        text = if (monto > 0) "Q${monto.toInt()}" else ""
+                        textSize = 10f
+                        gravity = Gravity.CENTER
+                        setSingleLine(true)
+                        setTextColor(if (monto == maximo && maximo > 0) colorPrimario else colorSecundario)
+                        if (monto == maximo && maximo > 0) setTypeface(null, android.graphics.Typeface.BOLD)
+                    }
+
+                    // 2. Barra con esquinas redondeadas arriba.
                     val altura = if (maximo > 0) {
-                        ((totales[i] / maximo) * 150).toInt()
-                            .coerceAtLeast(if (totales[i] > 0) 4 else 0)
-                    } else {
-                        0
+                        ((monto / maximo) * 130).toInt().coerceAtLeast(if (monto > 0) 6 else 0)
+                    } else 0
+
+                    val barraAlturaFinal = if (altura == 0) 4.dp() else altura.dp()
+                    val colorBarra = if (monto > 0) colorPrimario else colorBorde
+
+                    val drawableBarra = android.graphics.drawable.GradientDrawable().apply {
+                        shape = android.graphics.drawable.GradientDrawable.RECTANGLE
+                        val r = 6.dp().toFloat()
+                        cornerRadii = floatArrayOf(r, r, r, r, 2f, 2f, 2f, 2f)
+                        setColor(colorBarra)
                     }
 
-                    val barra = android.view.View(this@MainActivity).apply {
-                        setBackgroundColor(
-                            androidx.core.content.ContextCompat.getColor(
-                                this@MainActivity,
-                                R.color.finance_primary
-                            )
-                        )
-
-                        layoutParams = LinearLayout.LayoutParams(
-                            22.dp(),
-                            altura.dp()
-                        )
+                    val barra = View(this@MainActivity).apply {
+                        background = drawableBarra
+                        layoutParams = LinearLayout.LayoutParams(22.dp(), barraAlturaFinal).apply {
+                            topMargin = 4.dp()
+                            bottomMargin = 6.dp()
+                        }
                     }
 
-                    val etiqueta = TextView(this@MainActivity).apply {
-                        text = nombresDias[i]
+                    // 3. Etiqueta del día abajo de la barra.
+                    val esHoy = (i == 6)
+                    val tvDia = TextView(this@MainActivity).apply {
+                        text = nombresDias[i].replace(".", "").replaceFirstChar { it.uppercase() }
                         textSize = 11f
                         gravity = Gravity.CENTER
-                        setTextColor(
-                            androidx.core.content.ContextCompat.getColor(
-                                this@MainActivity,
-                                R.color.finance_secondary_text
-                            )
-                        )
+                        setTextColor(if (esHoy) colorPrimario else colorSecundario)
+                        if (esHoy) setTypeface(null, android.graphics.Typeface.BOLD)
                     }
 
+                    columna.addView(tvMonto)
                     columna.addView(barra)
-                    columna.addView(etiqueta)
+                    columna.addView(tvDia)
 
                     binding.contenedorGrafica.addView(columna)
+                }
+
+                // Renderizar desglose por categoría.
+                binding.contenedorCategorias.removeAllViews()
+
+                val porCategoria = gastos
+                    .groupBy { it.categoria }
+                    .mapValues { entry -> entry.value.sumOf { it.monto.toDouble() } }
+                    .toList()
+                    .sortedByDescending { it.second }
+
+                if (porCategoria.isEmpty()) {
+                    val tvVacio = TextView(this@MainActivity).apply {
+                        text = "Aún no tienes gastos registrados"
+                        textSize = 13f
+                        setTextColor(colorSecundario)
+                        setPadding(0, 8.dp(), 0, 8.dp())
+                    }
+                    binding.contenedorCategorias.addView(tvVacio)
+                } else {
+                    val totalGeneral = porCategoria.sumOf { it.second }.coerceAtLeast(1.0)
+
+                    porCategoria.forEach { (cat, montoCat) ->
+                        val porcentaje = ((montoCat / totalGeneral) * 100).toInt()
+
+                        val itemCat = LinearLayout(this@MainActivity).apply {
+                            orientation = LinearLayout.VERTICAL
+                            layoutParams = LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT
+                            ).apply {
+                                bottomMargin = 14.dp()
+                            }
+                        }
+
+                        // Fila con nombre y monto.
+                        val filaEncabezado = LinearLayout(this@MainActivity).apply {
+                            orientation = LinearLayout.HORIZONTAL
+                            layoutParams = LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT
+                            )
+                        }
+
+                        val emoji = emojiCategoria(cat)
+                        val tvNombreCat = TextView(this@MainActivity).apply {
+                            text = "$emoji  ${cat.name.replace("_", " ")}"
+                            textSize = 13f
+                            setTextColor(colorTexto)
+                            setTypeface(null, android.graphics.Typeface.BOLD)
+                            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+                        }
+
+                        val tvMontoCat = TextView(this@MainActivity).apply {
+                            text = String.format(Locale.US, "Q %.2f (%d%%)", montoCat, porcentaje)
+                            textSize = 13f
+                            setTextColor(colorSecundario)
+                            setTypeface(null, android.graphics.Typeface.BOLD)
+                        }
+
+                        filaEncabezado.addView(tvNombreCat)
+                        filaEncabezado.addView(tvMontoCat)
+
+                        // Barra de progreso horizontal.
+                        val trackBackground = android.graphics.drawable.GradientDrawable().apply {
+                            shape = android.graphics.drawable.GradientDrawable.RECTANGLE
+                            cornerRadius = 4.dp().toFloat()
+                            setColor(colorBorde)
+                        }
+
+                        val fillBackground = android.graphics.drawable.GradientDrawable().apply {
+                            shape = android.graphics.drawable.GradientDrawable.RECTANGLE
+                            cornerRadius = 4.dp().toFloat()
+                            setColor(colorPrimario)
+                        }
+
+                        val trackBarra = LinearLayout(this@MainActivity).apply {
+                            orientation = LinearLayout.HORIZONTAL
+                            background = trackBackground
+                            layoutParams = LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                8.dp()
+                            ).apply {
+                                topMargin = 6.dp()
+                            }
+                        }
+
+                        val fillBarra = View(this@MainActivity).apply {
+                            background = fillBackground
+                            layoutParams = LinearLayout.LayoutParams(
+                                0,
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                porcentaje.coerceAtLeast(2).toFloat()
+                            )
+                        }
+
+                        val spaceBarra = View(this@MainActivity).apply {
+                            layoutParams = LinearLayout.LayoutParams(
+                                0,
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                (100 - porcentaje).coerceAtLeast(0).toFloat()
+                            )
+                        }
+
+                        trackBarra.addView(fillBarra)
+                        trackBarra.addView(spaceBarra)
+
+                        itemCat.addView(filaEncabezado)
+                        itemCat.addView(trackBarra)
+
+                        binding.contenedorCategorias.addView(itemCat)
+                    }
                 }
 
             } catch (e: CancellationException) {
@@ -857,6 +996,20 @@ class MainActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
+        }
+    }
+
+    private fun emojiCategoria(categoria: Categoria): String {
+        return when (categoria.name.uppercase(Locale.US)) {
+            "ALIMENTACION", "ALIMENTACIÓN", "COMIDA" -> "🍔"
+            "TRANSPORTE", "VEHICULO" -> "🚗"
+            "VIVIENDA", "HOGAR" -> "🏠"
+            "ENTRETENIMIENTO", "OCIO" -> "🎮"
+            "SALUD", "MEDICINA" -> "💊"
+            "EDUCACION", "ESTUDIOS" -> "📚"
+            "SERVICIOS", "LUZ", "AGUA" -> "💡"
+            "COMPRAS", "ROPA" -> "🛍️"
+            else -> "🏷️"
         }
     }
 
