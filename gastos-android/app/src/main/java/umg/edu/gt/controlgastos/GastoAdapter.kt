@@ -10,8 +10,9 @@ import java.util.Locale
 import android.widget.Button
 // Muestra los gastos registrados en una lista.
 
-// Recibe una función para indicar qué gasto se desea eliminar.
+// Recibe las acciones para editar y eliminar gastos.
 class GastoAdapter(
+    private val onEditar: (Gasto) -> Unit,
     private val onEliminar: (Gasto) -> Unit
 ) : RecyclerView.Adapter<GastoAdapter.GastoViewHolder>()
 {
@@ -34,6 +35,9 @@ class GastoAdapter(
         // Identifica el botón Eliminar del archivo XML.
         val btnEliminar: Button =
             itemView.findViewById(R.id.btnEliminarGasto)
+        // Identifica el botón Editar del archivo XML.
+        val btnEditar: Button =
+            itemView.findViewById(R.id.btnEditarGasto)
     }
 
     // Crea el diseño de cada gasto.
@@ -69,6 +73,10 @@ class GastoAdapter(
         // Elimina el gasto al presionar el botón.
         holder.btnEliminar.setOnClickListener {
             onEliminar(gasto)
+        }
+        // Envía el gasto seleccionado cuando se presiona Editar.
+        holder.btnEditar.setOnClickListener {
+            onEditar(gasto)
         }
     }
 

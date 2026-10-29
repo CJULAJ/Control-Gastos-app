@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Formulario para modificar un gasto existente. -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <!-- Permite cambiar la descripción. -->
+    <EditText
+        android:id="@+id/etEditarDescripcion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:hint="Descripción del gasto"
+        android:inputType="textCapSentences"
+        android:maxLines="2" />
+
+    <!-- Permite cambiar el monto. -->
+    <EditText
+        android:id="@+id/etEditarMonto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:layout_marginTop="12dp"
+        android:hint="Monto en quetzales"
+        android:inputType="numberDecimal" />
+
+    <!-- Permite seleccionar otra categoría. -->
+    <Spinner
+        android:id="@+id/spEditarCategoria"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:layout_marginTop="12dp" />
+
+</LinearLayout>

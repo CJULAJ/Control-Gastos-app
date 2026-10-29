@@ -17,6 +17,9 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import androidx.appcompat.app.AlertDialog
+import android.view.LayoutInflater
+import android.widget.EditText
+import android.widget.Spinner
 class MainActivity : AppCompatActivity() {
 
     // Permite utilizar los elementos del archivo XML.
@@ -27,10 +30,11 @@ class MainActivity : AppCompatActivity() {
         val database = AppDatabase.obtenerInstancia(applicationContext)
         ControlGastos(GastoRepositoryRoom(database.gastoDao()))
     }
-
-    // Adaptador que muestra los gastos en la lista.
-    // Recibe el gasto seleccionado cuando se presiona Eliminar.
+    // Recibe el gasto seleccionado para editarlo o eliminarlo.
     private val gastoAdapter = GastoAdapter(
+        onEditar = { gasto ->
+            mostrarEditarGasto(gasto)
+        },
         onEliminar = { gasto ->
             confirmarEliminacion(gasto)
         }
@@ -83,6 +87,128 @@ class MainActivity : AppCompatActivity() {
 
         gastoAdapter.actualizarGastos(gastos)
     }
+    // Abre una ventana para editar el gasto seleccionado.
+
+
+    // Abre el formulario y permite modificar un gasto.
+    private fun mostrarEditarGasto(gasto: Gasto) {
+
+        // Carga el formulario de edición.
+        val vista = LayoutInflater.from(this)
+            .inflate(R.layout.dialog_editar_gasto, null)
+
+        val descripcion = vista.findViewById<EditText>(
+            R.id.etEditarDescripcion
+        )
+
+        val monto = vista.findViewById<EditText>(
+            R.id.etEditarMonto
+        )
+
+        val categoria = vista.findViewById<Spinner>(
+            R.id.spEditarCategoria
+        )
+
+        // Coloca los datos actuales del gasto.
+        descripcion.setText(gasto.descripcion)
+        monto.setText(gasto.monto.toString())
+
+        categoria.adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            Categoria.entries
+        )
+
+        categoria.setSelection(
+            Categoria.entries.indexOf(gasto.categoria)
+        )
+
+        // Prepara la ventana.
+        val dialogo = AlertDialog.Builder(this)
+            .setTitle("Editar gasto")
+            .setView(vista)
+            .setPositiveButton("Guardar cambios", null)
+            .setNegativeButton("Cancelar", null)
+            .create()
+
+        // Configura el botón para validar antes de guardar.
+        dialogo.setOnShowListener {
+            dialogo.getButton(AlertDialog.BUTTON_POSITIVE)
+                .setOnClickListener {
+
+                    val nuevaDescripcion =
+                        descripcion.text.toString().trim()
+
+                    val nuevoMonto =
+                        monto.text.toString().toDoubleOrNull()
+
+                    // Comprueba que la descripción no esté vacía.
+                    if (nuevaDescripcion.isEmpty()) {
+                        descripcion.error = "Ingresa una descripción"
+                        return@setOnClickListener
+                    }
+
+                    // Comprueba que el monto sea válido.
+                    if (nuevoMonto == null ||
+                        !nuevoMonto.isFinite() ||
+                        nuevoMonto <= 0.0
+                    ) {
+                        monto.error = "Ingresa un monto mayor que cero"
+                        return@setOnClickListener
+                    }
+
+                    val nuevaCategoria =
+                        categoria.selectedItem as Categoria
+
+                    // Guarda los cambios en Room.
+                    lifecycleScope.launch {
+
+                        val dao = AppDatabase
+                            .obtenerInstancia(applicationContext)
+                            .gastoDao()
+
+                        // Busca el registro original.
+                        val gastoGuardado = dao.obtenerPorId(gasto.id)
+
+                        if (gastoGuardado == null) {
+                            Toast.makeText(
+                                this@MainActivity,
+                                "No se encontró el gasto",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            dialogo.dismiss()
+                            return@launch
+                        }
+
+                        // Actualiza únicamente los campos editados.
+                        val gastoActualizado = gastoGuardado.copy(
+                            descripcion = nuevaDescripcion,
+                            monto = nuevoMonto,
+                            categoria = nuevaCategoria.name
+                        )
+
+                        dao.actualizar(gastoActualizado)
+
+                        // Actualiza la lista y el resumen.
+                        actualizarResumen()
+                        cargarGastos()
+
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Gasto actualizado correctamente",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        dialogo.dismiss()
+                    }
+                }
+        }
+
+        // Abre la ventana de edición.
+        dialogo.show()
+    }
+
+
     // Pregunta al usuario antes de eliminar un gasto.
     private fun confirmarEliminacion(gasto: Gasto) {
         AlertDialog.Builder(this)
