@@ -41,6 +41,16 @@
         <version>5.11.4</version>
         <scope>test</scope>
     </dependency>
+
+
+    <!-- Permite probar funciones suspend de Kotlin. -->
+    <dependency>
+        <groupId>org.jetbrains.kotlinx</groupId>
+        <artifactId>kotlinx-coroutines-test</artifactId>
+        <version>1.10.2</version>
+        <scope>test</scope>
+    </dependency>
+
 </dependencies>
 
 
