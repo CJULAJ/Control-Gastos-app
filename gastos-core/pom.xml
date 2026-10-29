@@ -25,19 +25,29 @@
     <exec.mainClass>edu.umg.programacion2.gastos.consola.MainKt</exec.mainClass>
   </properties>
 
-  <dependencies>
-    <!-- IMPORTANTE: la UNICA dependencia es la libreria estandar de Kotlin.
-         No hay nada de Android aqui: por eso el mismo codigo sirve en consola y en el telefono. -->
+
+<dependencies>
+    <!-- Librería estándar de Kotlin. -->
     <dependency>
-      <groupId>org.jetbrains.kotlin</groupId>
-      <artifactId>kotlin-stdlib</artifactId>
-      <version>${kotlin.version}</version>
+        <groupId>org.jetbrains.kotlin</groupId>
+        <artifactId>kotlin-stdlib</artifactId>
+        <version>${kotlin.version}</version>
     </dependency>
-  </dependencies>
+
+    <!-- Permite crear y ejecutar pruebas automáticas. -->
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>5.11.4</version>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
+
 
   <build>
     <!-- Solo hay codigo Kotlin, asi que Maven busca los fuentes en src/main/kotlin. -->
     <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+<testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
 
     <plugins>
       <!-- Compila los archivos .kt a .class (igual que en la Clase 11). -->
@@ -45,14 +55,24 @@
         <groupId>org.jetbrains.kotlin</groupId>
         <artifactId>kotlin-maven-plugin</artifactId>
         <version>${kotlin.version}</version>
-        <executions>
-          <execution>
-            <id>compile</id>
-            <goals>
-              <goal>compile</goal>
-            </goals>
-          </execution>
-        </executions>
+<executions>
+    <!-- Compila el código principal de Kotlin. -->
+    <execution>
+        <id>compile</id>
+        <goals>
+            <goal>compile</goal>
+        </goals>
+    </execution>
+
+    <!-- Compila las pruebas escritas en Kotlin. -->
+    <execution>
+        <id>test-compile</id>
+        <goals>
+            <goal>test-compile</goal>
+        </goals>
+    </execution>
+</executions>
+
       </plugin>
 
       <!-- Permite ejecutar el menu de consola con: mvn compile exec:java -->
