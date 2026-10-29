@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F3F6FC"
+    android:background="@color/finance_background"
     android:fillViewport="true">
 
     <LinearLayout
@@ -19,7 +19,7 @@
             android:orientation="vertical"
             android:gravity="center"
             android:padding="28dp"
-            android:background="#163C83">
+            android:background="@drawable/bg_panel_azul">
 
             <TextView
                 android:layout_width="76dp"
@@ -63,7 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="¡Únete a Control de Gastos!"
-                android:textColor="#172B4D"
+                android:textColor="@color/finance_text"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
@@ -72,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:text="Completa tus datos para comenzar"
-                android:textColor="#64748B"
+                android:textColor="@color/finance_secondary_text"
                 android:textSize="14sp" />
 
             <!-- Nombre de usuario -->
@@ -81,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="26dp"
                 android:text="Nombre de usuario"
-                android:textColor="#334155"
+                android:textColor="@color/finance_text"
                 android:textStyle="bold" />
 
             <EditText
@@ -95,8 +95,8 @@
                 android:singleLine="true"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                android:textColor="#172B4D"
-                android:textColorHint="#94A3B8" />
+                android:textColor="@color/finance_text"
+                android:textColorHint="@color/finance_secondary_text" />
 
             <!-- Contraseña -->
             <TextView
@@ -104,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="Contraseña"
-                android:textColor="#334155"
+                android:textColor="@color/finance_text"
                 android:textStyle="bold" />
 
             <EditText
@@ -118,8 +118,8 @@
                 android:singleLine="true"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                android:textColor="#172B4D"
-                android:textColorHint="#94A3B8" />
+                android:textColor="@color/finance_text"
+                android:textColorHint="@color/finance_secondary_text" />
 
             <!-- Confirmar contraseña -->
             <TextView
@@ -127,7 +127,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="Confirmar contraseña"
-                android:textColor="#334155"
+                android:textColor="@color/finance_text"
                 android:textStyle="bold" />
 
             <EditText
@@ -141,8 +141,8 @@
                 android:singleLine="true"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                android:textColor="#172B4D"
-                android:textColorHint="#94A3B8" />
+                android:textColor="@color/finance_text"
+                android:textColorHint="@color/finance_secondary_text" />
 
             <!-- Botón para crear cuenta -->
             <Button
@@ -161,8 +161,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:text="¿Ya tienes cuenta? Inicia sesión"
-                android:textColor="#2563EB"
-                android:backgroundTint="#FFFFFF" />
+                android:textColor="@color/finance_primary"
+                android:backgroundTint="@color/finance_surface" />
 
         </LinearLayout>
 
@@ -174,9 +174,8 @@
             android:layout_marginBottom="16dp"
             android:gravity="center"
             android:text="Control de Gastos • Finanzas personales"
-            android:textColor="#94A3B8"
+            android:textColor="@color/finance_secondary_text"
             android:textSize="12sp" />
 
     </LinearLayout>
 </ScrollView>
-

@@ -215,7 +215,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="Monto (Q)"
-                    android:textColor="#334155"
+                    android:textColor="@color/finance_text"
                     android:textStyle="bold" />
 
                 <EditText
@@ -230,12 +230,13 @@
                     android:inputType="numberDecimal"
                     android:paddingHorizontal="14dp" />
 
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="Categoría"
-                    android:textColor="#334155"
+                    android:textColor="@color/finance_text"
                     android:textStyle="bold" />
 
                 <Spinner
