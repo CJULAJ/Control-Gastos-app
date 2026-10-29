@@ -429,7 +429,6 @@ class MainActivity : AppCompatActivity() {
     // Actualiza el total de gastos.
     private suspend fun actualizarResumen() {
         binding.tvResumen.text = control.resumen()
-        binding.tvHolaMundo.text = "Hola que hace!!!"
     }
 
     // Obtiene la fecha actual.
