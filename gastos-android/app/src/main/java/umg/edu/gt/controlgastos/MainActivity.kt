@@ -66,6 +66,34 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+// Cierra la sesión del usuario actual.
+        binding.btnCerrarSesion.setOnClickListener {
+
+            AlertDialog.Builder(this)
+                .setTitle("Cerrar sesión")
+                .setMessage("¿Deseas salir de tu cuenta?")
+                .setPositiveButton("Cerrar sesión") { _, _ ->
+
+                    // Elimina la sesión guardada.
+                    getSharedPreferences(
+                        "sesion_usuario",
+                        MODE_PRIVATE
+                    ).edit().remove("usuario_id").apply()
+
+                    // Regresa al inicio de sesión.
+                    val intent = Intent(this, LoginActivity::class.java)
+
+                    // Evita regresar al panel con el botón Atrás.
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+                    startActivity(intent)
+                    finish()
+                }
+                .setNegativeButton("Cancelar", null)
+                .show()
+        }
+
 
         // Configura la lista de gastos.
         binding.rvGastos.layoutManager = LinearLayoutManager(this)

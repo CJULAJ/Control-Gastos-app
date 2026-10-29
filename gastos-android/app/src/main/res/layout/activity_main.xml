@@ -8,6 +8,17 @@
     android:orientation="vertical"
     android:padding="24dp">
 
+    <!-- Botón para cerrar la sesión actual -->
+    <Button
+        android:id="@+id/btnCerrarSesion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CERRAR SESIÓN"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#DC2626"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp" />
+
     <!-- Campo para escribir la descripción. -->
     <EditText
         android:id="@+id/etDescripcion"
