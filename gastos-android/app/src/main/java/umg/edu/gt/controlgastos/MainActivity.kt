@@ -230,6 +230,7 @@ class MainActivity : AppCompatActivity() {
         binding.seccionFiltros.visibility = View.GONE
         binding.btnCerrarSesion.visibility = View.GONE
         binding.seccionDatos.visibility = View.GONE
+        binding.seccionPerfil.visibility = View.GONE
 
         when (seccion) {
             "inicio" -> {
@@ -262,7 +263,9 @@ class MainActivity : AppCompatActivity() {
             }
 
             "perfil" -> {
+                binding.seccionPerfil.visibility = View.VISIBLE
                 binding.btnCerrarSesion.visibility = View.VISIBLE
+                cargarPerfil()
             }
         }
 
@@ -842,6 +845,61 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(
                     this@MainActivity,
                     "No se pudieron cargar las estadísticas",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    private fun cargarPerfil() {
+        lifecycleScope.launch {
+            try {
+                // Buscar al usuario que inició sesión.
+                val usuario = withContext(Dispatchers.IO) {
+                    AppDatabase.obtenerInstancia(applicationContext)
+                        .usuarioDao()
+                        .buscarPorId(usuarioId)
+                }
+
+                binding.tvNombrePerfil.text =
+                    usuario?.nombreUsuario ?: "Usuario"
+
+                // Consultar únicamente sus gastos.
+                val gastos = control.listar()
+
+                val total = gastos.sumOf {
+                    it.monto.toDouble()
+                }
+
+                val hoy = fechaDeHoy()
+
+                val totalHoy = gastos
+                    .filter { it.fecha == hoy }
+                    .sumOf { it.monto.toDouble() }
+
+                binding.tvResumenPerfil.text =
+                    String.format(
+                        Locale.US,
+                        "%d gastos · Total: Q %.2f",
+                        gastos.size,
+                        total
+                    )
+
+                binding.tvGastosHoyPerfil.text =
+                    String.format(
+                        Locale.US,
+                        "Gastado hoy: Q %.2f",
+                        totalHoy
+                    )
+
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Log.e("MainActivity", "Error al cargar perfil", e)
+
+                Toast.makeText(
+                    this@MainActivity,
+                    "No se pudo cargar el perfil",
                     Toast.LENGTH_SHORT
                 ).show()
             }
