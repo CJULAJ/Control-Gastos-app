@@ -445,27 +445,55 @@ class MainActivity : AppCompatActivity() {
             fecha = fechaDeHoy()
         )
 
-        // Guarda el gasto utilizando la biblioteca gastos-core.
         lifecycleScope.launch {
-            val error = control.registrar(gasto)
+            try {
+                // Intenta registrar el gasto.
+                val error = control.registrar(gasto)
 
-            if (error != null) {
+                // Muestra los errores de validación.
+                if (error != null) {
+                    Toast.makeText(
+                        this@MainActivity,
+                        error,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@launch
+                }
+
+                // Limpia los campos después de guardar.
+                binding.etDescripcion.text.clear()
+                binding.etMonto.text.clear()
+
+                // Actualiza el resumen y la lista.
+                actualizarResumen()
+                cargarGastos()
+
                 Toast.makeText(
                     this@MainActivity,
-                    error,
+                    "Gasto registrado correctamente",
                     Toast.LENGTH_SHORT
                 ).show()
-                return@launch
+
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                // Respeta la cancelación de la corrutina.
+                throw e
+
+            } catch (e: Exception) {
+                // Muestra un mensaje si ocurre un error inesperado.
+                android.util.Log.e(
+                    "ControlGastos",
+                    "Error al registrar o actualizar los gastos",
+                    e
+                )
+
+                Toast.makeText(
+                    this@MainActivity,
+                    "Ocurrió un error. Intenta nuevamente.",
+                    Toast.LENGTH_LONG
+                ).show()
             }
-
-            // Limpia los campos después de guardar.
-            binding.etDescripcion.text.clear()
-            binding.etMonto.text.clear()
-
-            // Actualiza el resumen y la lista.
-            actualizarResumen()
-            cargarGastos()
         }
+
     }
 
     // Actualiza el total de gastos.
