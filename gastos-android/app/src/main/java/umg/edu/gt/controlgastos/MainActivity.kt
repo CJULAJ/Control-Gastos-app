@@ -20,6 +20,7 @@ import androidx.appcompat.app.AlertDialog
 import android.view.LayoutInflater
 import android.widget.EditText
 import android.widget.Spinner
+import android.content.Intent
 class MainActivity : AppCompatActivity() {
 
     // Permite utilizar los elementos del archivo XML.
@@ -41,12 +42,30 @@ class MainActivity : AppCompatActivity() {
     )
 
     // Configura la pantalla al abrir la aplicación.
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Verifica que exista una sesión iniciada.
+        val preferencias = getSharedPreferences(
+            "sesion_usuario",
+            MODE_PRIVATE
+        )
+
+        val usuarioId = preferencias.getInt("usuario_id", -1)
+
+        // Impide entrar al panel sin iniciar sesión.
+        if (usuarioId == -1) {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+            return
+        }
 
         // Carga el diseño XML.
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
 
         // Configura la lista de gastos.
         binding.rvGastos.layoutManager = LinearLayoutManager(this)
