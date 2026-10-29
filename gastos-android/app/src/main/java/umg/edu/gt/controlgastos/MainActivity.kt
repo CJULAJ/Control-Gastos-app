@@ -411,30 +411,48 @@ class MainActivity : AppCompatActivity() {
     // Elimina un gasto de Room y actualiza la pantalla.
     private fun eliminarGasto(gasto: Gasto) {
         lifecycleScope.launch {
+            try {
+                // Intenta eliminar el gasto del usuario actual.
+                val exito = control.eliminar(gasto.id)
 
-            val exito = control.eliminar(gasto.id)
+                if (!exito) {
+                    Toast.makeText(
+                        this@MainActivity,
+                        "No se encontró el gasto",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@launch
+                }
 
-            if (!exito) {
+                // Actualiza el resumen y la lista.
+                actualizarResumen()
+                cargarGastos()
+
                 Toast.makeText(
                     this@MainActivity,
-                    "No se encontró el gasto",
+                    "Gasto eliminado correctamente",
                     Toast.LENGTH_SHORT
                 ).show()
-                return@launch
+
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
+
+            } catch (e: Exception) {
+                android.util.Log.e(
+                    "ControlGastos",
+                    "Error al eliminar o actualizar los gastos",
+                    e
+                )
+
+                Toast.makeText(
+                    this@MainActivity,
+                    "Ocurrió un error al procesar la operación.",
+                    Toast.LENGTH_LONG
+                ).show()
             }
-
-            // Actualiza el total y la lista.
-            actualizarResumen()
-            cargarGastos()
-
-            // Confirma que el gasto fue eliminado.
-            Toast.makeText(
-                this@MainActivity,
-                "Gasto eliminado correctamente",
-                Toast.LENGTH_SHORT
-            ).show()
         }
     }
+
     // Valida los datos y registra un nuevo gasto.
     private fun guardar() {
 
