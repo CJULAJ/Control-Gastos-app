@@ -72,4 +72,50 @@
         android:layout_weight="1"
         android:layout_marginTop="8dp" />
 
+    <!-- Permite filtrar los gastos por categoría. -->
+    <Spinner
+        android:id="@+id/spFiltroCategoria"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:contentDescription="Filtrar gastos por categoría" />
+
+    <!-- Permite escribir la fecha que queremos consultar. -->
+    <EditText
+        android:id="@+id/etFiltroFecha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:minHeight="48dp"
+        android:hint="Fecha (AAAA-MM-DD)"
+        android:inputType="date"
+        android:singleLine="true" />
+
+    <!-- Botones para aplicar o quitar los filtros. -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="4dp">
+
+        <!-- Aplica los filtros seleccionados. -->
+        <Button
+            android:id="@+id/btnFiltrar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Filtrar"
+            android:layout_marginEnd="8dp" />
+
+        <!-- Vuelve a mostrar todos los gastos. -->
+        <Button
+            android:id="@+id/btnMostrarTodos"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Mostrar todos" />
+
+    </LinearLayout>
+
+
 </LinearLayout>
