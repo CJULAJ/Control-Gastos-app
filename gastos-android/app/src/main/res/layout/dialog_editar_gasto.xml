@@ -66,4 +66,26 @@
         android:background="@drawable/bg_campo_login"
         android:paddingHorizontal="12dp" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Fecha (AAAA-MM-DD)"
+        android:textColor="@color/finance_text"
+        android:textStyle="bold" />
+
+    <!-- Permite cambiar la fecha. -->
+    <EditText
+        android:id="@+id/etEditarFecha"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/bg_campo_login"
+        android:paddingHorizontal="14dp"
+        android:textColor="@color/finance_text"
+        android:textColorHint="@color/finance_secondary_text"
+        android:hint="AAAA-MM-DD"
+        android:inputType="date"
+        android:singleLine="true" />
+
 </LinearLayout>

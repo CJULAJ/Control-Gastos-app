@@ -411,9 +411,45 @@ class MainActivity : AppCompatActivity() {
             R.id.spEditarCategoria
         )
 
+        val etEditarFecha = vista.findViewById<EditText>(
+            R.id.etEditarFecha
+        )
+
         // Coloca los datos actuales del gasto.
         descripcion.setText(gasto.descripcion)
         monto.setText(gasto.monto.toString())
+        etEditarFecha.setText(gasto.fecha)
+
+        // Permite abrir un selector de fecha al pulsar el campo.
+        etEditarFecha.setOnClickListener {
+            val partes = etEditarFecha.text.toString().split("-")
+            val cal = Calendar.getInstance()
+            if (partes.size == 3) {
+                val a = partes[0].toIntOrNull()
+                val m = partes[1].toIntOrNull()?.minus(1)
+                val d = partes[2].toIntOrNull()
+                if (a != null && m != null && d != null) {
+                    cal.set(a, m, d)
+                }
+            }
+
+            android.app.DatePickerDialog(
+                this,
+                { _, year, month, dayOfMonth ->
+                    val fechaFormateada = String.format(
+                        Locale.US,
+                        "%04d-%02d-%02d",
+                        year,
+                        month + 1,
+                        dayOfMonth
+                    )
+                    etEditarFecha.setText(fechaFormateada)
+                },
+                cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH)
+            ).show()
+        }
 
         categoria.adapter = ArrayAdapter(
             this,
@@ -444,6 +480,9 @@ class MainActivity : AppCompatActivity() {
                     val nuevoMonto =
                         monto.text.toString().toDoubleOrNull()
 
+                    val nuevaFecha =
+                        etEditarFecha.text.toString().trim()
+
                     // Comprueba que la descripción no esté vacía.
                     if (nuevaDescripcion.isEmpty()) {
                         descripcion.error = "Ingresa una descripción"
@@ -456,6 +495,26 @@ class MainActivity : AppCompatActivity() {
                         nuevoMonto <= 0.0
                     ) {
                         monto.error = "Ingresa un monto mayor que cero"
+                        return@setOnClickListener
+                    }
+
+                    // Comprueba que la fecha tenga formato válido.
+                    if (nuevaFecha.isNotEmpty()) {
+                        val formato = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+                        formato.isLenient = false
+                        val fechaValida = try {
+                            val fechaParseada = formato.parse(nuevaFecha)
+                            fechaParseada != null && formato.format(fechaParseada) == nuevaFecha
+                        } catch (e: Exception) {
+                            false
+                        }
+
+                        if (!fechaValida) {
+                            etEditarFecha.error = "Usa el formato AAAA-MM-DD"
+                            return@setOnClickListener
+                        }
+                    } else {
+                        etEditarFecha.error = "Ingresa una fecha"
                         return@setOnClickListener
                     }
 
@@ -489,7 +548,7 @@ class MainActivity : AppCompatActivity() {
                             descripcion = nuevaDescripcion,
                             monto = nuevoMonto,
                             categoria = nuevaCategoria.name,
-                            fecha = gasto.fecha
+                            fecha = nuevaFecha
                         )
 
                         // Actualiza la lista y el resumen.
